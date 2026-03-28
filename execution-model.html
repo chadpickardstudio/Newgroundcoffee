@@ -393,6 +393,67 @@ body { background: var(--bg); color: var(--white); font-family: var(--sans); lin
 .qi-done-check { font-size: 1.6rem; }
 .qi-done-text { font-size: .82rem; font-weight: 700; color: var(--green); }
 .qi-done-sub { font-size: .73rem; color: var(--muted); }
+/* Draft preview (communications) */
+.qi-draft {
+  margin: 0 0 12px; padding: 10px 11px;
+  background: rgba(255,255,255,.025); border: 1px solid var(--border);
+  border-radius: 8px; position: relative;
+}
+.qi-draft-label {
+  font-size: .55rem; font-family: var(--mono); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .16em; color: var(--terra);
+  margin-bottom: 7px;
+}
+.qi-draft-text {
+  font-size: .72rem; color: var(--muted); line-height: 1.6;
+  white-space: pre-wrap; font-family: var(--sans);
+}
+.qi-draft-text strong { color: var(--white); font-weight: 500; }
+.qi-draft.revised {
+  border-color: rgba(74,124,89,.3); background: rgba(74,124,89,.04);
+  animation: draftFadeIn .5s ease;
+}
+.qi-draft.revised .qi-draft-label { color: var(--green); }
+.qi-draft.revised .qi-draft-label::after { content: ' · v2'; }
+@keyframes draftFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Revision feedback */
+.qi-feedback {
+  margin: 0 0 12px; padding: 9px 11px;
+  background: rgba(196,148,58,.04); border: 1px solid rgba(196,148,58,.2);
+  border-left: 3px solid var(--amber); border-radius: 6px;
+  animation: draftFadeIn .4s ease;
+}
+.qi-feedback-label {
+  font-size: .55rem; font-family: var(--mono); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .12em; color: var(--amber);
+  margin-bottom: 4px;
+}
+.qi-feedback-text {
+  font-size: .72rem; color: var(--white); line-height: 1.5; font-style: italic;
+}
+.qi-revising {
+  padding: 10px 0; display: flex; align-items: center; gap: 8px;
+  font-size: .72rem; color: var(--muted); animation: draftFadeIn .3s ease;
+}
+.qi-revising-dot {
+  width: 5px; height: 5px; background: var(--terra); border-radius: 50%;
+  animation: breathe 1.5s ease-in-out infinite;
+}
+
+/* 3-button layout for communications */
+.qi-actions-comm { display: flex; gap: 6px; }
+.btn-changes {
+  flex: 1; padding: 9px; background: transparent; color: var(--amber);
+  border: 1px solid rgba(196,148,58,.3); border-radius: 7px;
+  font-size: .76rem; font-weight: 500; cursor: pointer;
+  transition: all .2s; font-family: var(--sans);
+}
+.btn-changes:hover { border-color: var(--amber); background: rgba(196,148,58,.06); }
+.btn-changes.used {
+  opacity: .4; pointer-events: none; border-style: dashed;
+}
+
 /* Executing pulse */
 .qi-executing {
   padding: 14px 13px; display: none;
@@ -844,14 +905,19 @@ const SCENARIOS = [
   },
   {
     type: 'proactive',
-    label: 'At-Risk Accounts',
+    label: 'At-Risk · Revision',
     steps: [
       { at: 900,  act: 'msg',    from: 'ai',    text: '⚠️ <strong>CEO flagged 3 wholesale accounts.</strong>\n\n• <strong>Greenhood Coffee</strong> — 18 days silent (usual cycle: 7 days)\n• <strong>The Crown Inn</strong> — Volume down 40%, dropped single origins\n• <strong>Jamie Oliver Group</strong> — Payments stretching 14 → 26 days' },
       { at: 4500, act: 'msg',    from: 'human', text: 'Draft something for Greenhood — they\'re probably just short-staffed, keep it warm.' },
       { at: 6000, act: 'typing' },
-      { at: 8500, act: 'msg',    from: 'ai',    text: 'Done. Casual check-in from Dickon referencing their usual Big House order, mentions the new East Timor Rotutu seasonal. Warm tone, no pressure. Ready to send from your address.' },
-      { at: 10000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Outreach Email', detail:'Personal check-in — Greenhood Coffee', chips:['Gmail','From: Dickon','Greenhood'], agent:'CEO Agent', okText:'Send Email', doneText:'Email sent from Dickon\'s address', doneSub:'Response tracking enabled' } }
-    ], duration: 20000
+      { at: 8500, act: 'msg',    from: 'ai',    text: 'Done. Email drafted from your address — casual check-in referencing their usual Big House order. Full preview is in the approval queue for you to review before it sends.' },
+      { at: 10000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Outreach Email', detail:'Personal check-in — Greenhood Coffee', chips:['Gmail','From: Dickon','Greenhood'], agent:'CEO Agent', okText:'Approve & Send', draft:'Hi James,\n\nHope things are good your end. Noticed we haven\'t heard from you in a while — just wanted to check in.\n\nWe\'ve got a <strong>new East Timor Rotutu</strong> that\'s been going down really well if you fancy trying something different alongside the usual Big House.\n\nLet me know if you need anything.\n\nBest,\nDickon', doneText:'Email sent from Dickon\'s address', doneSub:'Response tracking enabled' } },
+      { at: 14500, act: 'revise', feedback: 'Too formal — make it sound more like me. And mention we can drop samples round to the shop.' },
+      { at: 16000, act: 'typing' },
+      { at: 19000, act: 'msg',   from: 'ai', text: 'Redrafted — warmer tone, added the sample drop-off offer. Updated preview is in the queue.' },
+      { at: 20000, act: 'redraft', newDraft:'Hey James,\n\nBeen a minute! Hope you\'re not too run off your feet over there.\n\nJust a heads up — we\'ve got a <strong>new East Timor Rotutu</strong> in that\'s been flying out the door. Happy to <strong>drop some samples round to the shop</strong> if you want to try it alongside the Big House.\n\nGive us a shout.\n\nDickon' },
+      { at: 23000, act: 'auto_approve' }
+    ], duration: 28000
   },
   {
     type: 'requested',
@@ -860,7 +926,7 @@ const SCENARIOS = [
       { at: 900,  act: 'msg',    from: 'joel', text: 'Those churning subscribers — can you send them something before we lose them?' },
       { at: 2300, act: 'typing' },
       { at: 5200, act: 'msg',    from: 'ai',    text: '3 subscribers showing churn signals. Personalised emails drafted for each:\n\n• <strong>Emma T.</strong> — Single Origins fan, references her last Rotutu order\n• <strong>Marcus R.</strong> — Mug Shot subscriber, free bag of Fun House offer\n• <strong>The Cornstore</strong> — B2B account, Big House volume discount angle\n\n<span class="hl">£380/mo</span> at risk if we lose all three. Emails ready in Klaviyo.' },
-      { at: 7500, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Win-Back Campaign', detail:'3 personalised emails — churning subscribers', chips:['Klaviyo','3 emails','£380/mo at risk'], agent:'CMO Agent', okText:'Send Campaign', doneText:'3 emails sent via Klaviyo', doneSub:'Open tracking active — results in 48hrs' } }
+      { at: 7500, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Win-Back Campaign', detail:'3 personalised emails — churning subscribers', chips:['Klaviyo','3 emails','£380/mo at risk'], agent:'CMO Agent', okText:'Approve & Send', draft:'<strong>Emma T.</strong> — "We\'ve missed you! Your favourite Rotutu single origin is back in stock…"\n\n<strong>Marcus R.</strong> — "Still loving espresso? Here\'s a free bag of Mug Shot on us…"\n\n<strong>The Cornstore</strong> — "Your volume qualifies for our wholesale rate — let\'s chat…"', doneText:'3 emails sent via Klaviyo', doneSub:'Open tracking active — results in 48hrs' } }
     ], duration: 17000
   },
   {
@@ -906,8 +972,8 @@ const SCENARIOS = [
     label: 'Payment Overdue',
     steps: [
       { at: 900,  act: 'msg', from: 'ai', text: '💸 <strong>CFO flagged overdue payments.</strong>\n\n<strong>The Crown Inn</strong> has two consecutive invoices outstanding:\n• Invoice #CI-2026-0108 — £440 (15 days overdue)\n• Invoice #CI-2026-0091 — £400 (28 days overdue)\n\nTotal outstanding: <span class="hl">£840</span>. Payment terms are 14 days.' },
-      { at: 4800, act: 'msg', from: 'ai', text: 'Drafted a gentle but clear reminder from Dickon — acknowledges the relationship, references both invoice numbers, mentions they\'re valued as a long-standing account. Professional tone, not aggressive.' },
-      { at: 7000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'proactive', title:'Send Payment Reminder', detail:'The Crown Inn — £840 outstanding (2 invoices)', chips:['Gmail','£840','2 invoices overdue'], agent:'CFO Agent', okText:'Send Reminder', doneText:'Reminder sent from Dickon\'s address', doneSub:'Flagged in Xero — follow-up in 5 days if no response' } }
+      { at: 4800, act: 'msg', from: 'ai', text: 'Drafted a gentle but clear reminder from Dickon — acknowledges the relationship, references both invoices. Full email preview is in the queue for you to check before it sends.' },
+      { at: 7000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'proactive', title:'Send Payment Reminder', detail:'The Crown Inn — £840 outstanding (2 invoices)', chips:['Gmail','£840','2 invoices overdue'], agent:'CFO Agent', okText:'Approve & Send', draft:'Hi there,\n\nJust a quick note regarding two invoices that are a little overdue:\n\n• <strong>#CI-2026-0108</strong> — £440 (due 13 Mar)\n• <strong>#CI-2026-0091</strong> — £400 (due 28 Feb)\n\nTotally understand things get busy — just want to flag these so they don\'t slip through. You\'re a valued account and we appreciate the partnership.\n\nHappy to discuss if anything needs adjusting.\n\nBest,\nDickon', doneText:'Reminder sent from Dickon\'s address', doneSub:'Flagged in Xero — follow-up in 5 days if no response' } }
     ], duration: 17000
   }
 ];
@@ -1008,6 +1074,7 @@ function showQueueItem(d) {
   qCountEl.textContent = '1';
   qCountEl.classList.remove('zero');
 
+  const isComm = !!d.draft;
   const item = document.createElement('div');
   item.className = 'q-item';
   item.dataset.doneText = d.doneText;
@@ -1022,14 +1089,18 @@ function showQueueItem(d) {
       <div class="qi-title">${d.title}</div>
       <div class="qi-detail">${d.detail}</div>
       <div class="qi-chips">${d.chips.map(c=>`<span class="qi-chip">${c}</span>`).join('')}</div>
+      ${isComm ? `<div class="qi-draft" id="qidraft_${current}"><div class="qi-draft-label">Email Preview</div><div class="qi-draft-text">${d.draft}</div></div>` : ''}
       <div style="margin-bottom:12px"><span class="qi-agent">${d.agent}</span></div>
-      <div class="qi-actions">
+      <div id="qifeedback_${current}"></div>
+      <div id="qirevising_${current}"></div>
+      <div class="${isComm ? 'qi-actions-comm' : 'qi-actions'}" id="qiactions_${current}">
         <button class="btn-approve" onclick="approveItem(this)">${d.okText}</button>
+        ${isComm ? '<button class="btn-changes" id="btnChanges_' + current + '">Request Changes</button>' : ''}
         <button class="btn-decline" onclick="declineItem(this)">Decline</button>
       </div>
     </div>
     <div class="qi-executing" id="qiexec_${current}">
-      <div class="exec-text">Executing…</div>
+      <div class="exec-text">Sending…</div>
       <div class="exec-bar"><div class="exec-fill" id="qiexecfill_${current}"></div></div>
     </div>
     <div class="qi-done" id="qidone_${current}">
@@ -1095,6 +1166,41 @@ function declineItem(btn) {
   item.classList.add('declined');
 }
 
+function showRevisionFeedback(feedback, idx) {
+  // Disable the Request Changes button
+  const changesBtn = document.getElementById(`btnChanges_${idx}`);
+  if (changesBtn) changesBtn.classList.add('used');
+
+  // Show feedback
+  const fbEl = document.getElementById(`qifeedback_${idx}`);
+  if (fbEl) {
+    fbEl.innerHTML = `<div class="qi-feedback"><div class="qi-feedback-label">Dickon's feedback</div><div class="qi-feedback-text">"${feedback}"</div></div>`;
+  }
+
+  // Show revising indicator
+  const revEl = document.getElementById(`qirevising_${idx}`);
+  if (revEl) {
+    revEl.innerHTML = `<div class="qi-revising"><div class="qi-revising-dot"></div>Agent redrafting…</div>`;
+  }
+}
+
+function showRedraft(newDraft, idx) {
+  // Clear revising indicator
+  const revEl = document.getElementById(`qirevising_${idx}`);
+  if (revEl) revEl.innerHTML = '';
+
+  // Clear feedback
+  const fbEl = document.getElementById(`qifeedback_${idx}`);
+  if (fbEl) fbEl.innerHTML = '';
+
+  // Update draft with new content and revised styling
+  const draftEl = document.getElementById(`qidraft_${idx}`);
+  if (draftEl) {
+    draftEl.classList.add('revised');
+    draftEl.querySelector('.qi-draft-text').innerHTML = newDraft;
+  }
+}
+
 /* ══════════════════════════════════════════
    START SCENARIO
 ══════════════════════════════════════════ */
@@ -1118,9 +1224,15 @@ function startScenario(idx) {
   // Run steps
   s.steps.forEach(step => {
     const t = setTimeout(() => {
-      if (step.act === 'msg')   showMsg(step.from, step.text.replace(/\n/g, '<br>'));
-      if (step.act === 'typing') typingEl.classList.add('show');
-      if (step.act === 'queue') showQueueItem(step.data);
+      if (step.act === 'msg')     showMsg(step.from, step.text.replace(/\n/g, '<br>'));
+      if (step.act === 'typing')  typingEl.classList.add('show');
+      if (step.act === 'queue')   showQueueItem(step.data);
+      if (step.act === 'revise')  showRevisionFeedback(step.feedback, step.idx || current);
+      if (step.act === 'redraft') showRedraft(step.newDraft, step.idx || current);
+      if (step.act === 'auto_approve') {
+        const btn = document.querySelector(`#qiactions_${step.idx || current} .btn-approve`);
+        if (btn) approveItem(btn);
+      }
     }, step.at);
     timers.push(t);
   });
