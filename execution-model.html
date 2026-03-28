@@ -676,6 +676,201 @@ body { background: var(--bg); color: var(--white); font-family: var(--sans); lin
 }
 .footer-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--white); margin-bottom: 8px; }
 .footer-tag { font-size: .8rem; color: var(--dim); }
+
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════ */
+
+/* Tablet */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero { padding: 60px 20px; min-height: auto; }
+  .hero h1 { font-size: clamp(2.2rem, 7vw, 3.5rem); }
+  .hero-sub { font-size: .88rem; }
+  .hero-pills { gap: 6px; }
+  .pill { font-size: .68rem; padding: 5px 12px; }
+  .scroll-cue { display: none; }
+
+  /* Section heads */
+  .sec-head { padding: 60px 20px 40px; }
+  .sec-head h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+
+  /* Type explainer */
+  .type-row { flex-direction: column; gap: 10px; padding: 0 20px 36px; }
+  .type-card { min-width: 0; }
+
+  /* Scenario tabs — horizontal scroll */
+  .scenario-tabs {
+    flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start;
+    padding: 0 20px 24px; gap: 6px; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .scenario-tabs::-webkit-scrollbar { display: none; }
+  .stab { white-space: nowrap; flex-shrink: 0; font-size: .66rem; padding: 6px 11px; }
+
+  /* Demo grid — stack vertically */
+  .demo-outer { padding: 0 12px 60px; }
+  .demo-grid { grid-template-columns: 1fr; gap: 14px; }
+
+  /* Slack — hide sidebar */
+  .slack-layout { grid-template-columns: 1fr; }
+  .slack-sidebar { display: none; }
+  .slack-wrap { min-height: 420px; }
+  .slack-msgs { min-height: 260px; padding: 14px 12px; }
+  .msg-text { font-size: .78rem; }
+
+  /* Queue panel — not sticky on mobile */
+  .queue-panel { position: static; }
+  .qp-body { min-height: 300px; }
+
+  /* Dashboard section */
+  .dashboard-section { padding: 0 12px 80px; }
+
+  /* Dashboard nav — scroll links */
+  .dash-nav { padding: 0 14px; gap: 12px; height: 48px; overflow-x: auto; }
+  .dash-logo { font-size: .8rem; white-space: nowrap; flex-shrink: 0; }
+  .dash-nav-links { flex-shrink: 0; }
+  .dnl { padding: 12px 8px; font-size: .68rem; white-space: nowrap; }
+  .dash-nav-right { flex-shrink: 0; }
+
+  /* Dashboard body */
+  .dash-body { padding: 16px 14px; gap: 14px; }
+  .dash-greeting { font-size: .82rem; }
+  .dash-date { font-size: .55rem; }
+
+  /* KPIs — 2 columns on tablet */
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .kpi { padding: 14px 12px; }
+  .kpi-val { font-size: 1.3rem; }
+  .kpi-label { font-size: .55rem; letter-spacing: .15em; }
+
+  /* Mid row — stack */
+  .dash-mid { grid-template-columns: 1fr; }
+
+  /* Bottom row — stack */
+  .dash-bot { grid-template-columns: 1fr; }
+
+  /* Donut card — horizontal layout when stacked */
+  .dash-donut-card { flex-direction: row; gap: 16px; flex-wrap: wrap; }
+  .donut-svg { width: 100px; height: 100px; }
+}
+
+/* Phone */
+@media (max-width: 480px) {
+  /* Hero */
+  .hero { padding: 48px 16px; }
+  .hero h1 { font-size: 2rem; margin-bottom: 20px; }
+  .hero-sub { font-size: .82rem; margin-bottom: 32px; }
+  .hero-eyebrow { font-size: .6rem; margin-bottom: 20px; }
+  .hero-pills { gap: 5px; }
+  .pill { font-size: .6rem; padding: 4px 10px; }
+
+  /* Sections */
+  .sec-head { padding: 48px 16px 32px; }
+  .sec-head h2 { font-size: 1.5rem; }
+  .sec-head p { font-size: .82rem; }
+  .type-row { padding: 0 16px 28px; }
+
+  /* Scenario tabs */
+  .scenario-tabs { padding: 0 16px 20px; }
+  .stab { font-size: .6rem; padding: 5px 9px; }
+
+  /* Demo */
+  .demo-outer { padding: 0 8px 48px; }
+
+  /* Slack */
+  .slack-titlebar { padding: 8px 12px; }
+  .slack-wrap { min-height: 360px; border-radius: 10px; }
+  .slack-msgs { min-height: 220px; padding: 12px 10px; gap: 12px; }
+  .slack-cbar { padding: 8px 10px; }
+  .cbar-name { font-size: .78rem; }
+  .cbar-trigger { font-size: .58rem; padding: 2px 7px; }
+  .msg-av { width: 28px; height: 28px; font-size: .58rem; }
+  .msg-name { font-size: .76rem; }
+  .msg-text { font-size: .74rem; line-height: 1.5; }
+  .msg-bot { font-size: .52rem; }
+  .msg-time { font-size: .6rem; }
+  .msg-confirm { padding: 7px 10px; }
+  .msg-confirm-top { font-size: .74rem; }
+  .msg-confirm-sub { font-size: .68rem; }
+  .slack-input-mock { font-size: .72rem; padding: 7px 10px; }
+
+  /* Queue */
+  .queue-panel { border-radius: 10px; }
+  .qp-head { padding: 12px 14px; }
+  .qp-body { min-height: 240px; padding: 12px; }
+  .qi-top { padding: 8px 11px; }
+  .qi-type { font-size: .56rem; }
+  .qi-badge { font-size: .56rem; }
+  .qi-body { padding: 10px 11px; }
+  .qi-title { font-size: .78rem; }
+  .qi-detail { font-size: .7rem; }
+  .qi-chip { font-size: .6rem; padding: 2px 6px; }
+  .qi-agent { font-size: .6rem; }
+  .btn-approve { font-size: .74rem; padding: 8px; }
+  .btn-decline { font-size: .74rem; padding: 8px 12px; }
+  .btn-changes { font-size: .7rem; padding: 8px; }
+  .qi-draft { padding: 8px 10px; }
+  .qi-draft-label { font-size: .5rem; }
+  .qi-draft-text { font-size: .68rem; }
+  .qi-preview-link { padding: 7px 10px; }
+  .qi-preview-text { font-size: .64rem; }
+  .qi-feedback { padding: 7px 10px; }
+  .qi-feedback-text { font-size: .68rem; }
+
+  /* Dashboard */
+  .dashboard-section { padding: 0 8px 60px; }
+  .browser-chrome { border-radius: 10px; }
+  .browser-bar { padding: 8px 10px; gap: 8px; }
+  .browser-url { font-size: .6rem; padding: 5px 8px; }
+  .mac-dot { width: 10px; height: 10px; }
+
+  .dash-nav { padding: 0 10px; gap: 8px; height: 44px; }
+  .dash-logo { font-size: .74rem; gap: 6px; }
+  .logo-dot { width: 5px; height: 5px; }
+  .dnl { padding: 10px 6px; font-size: .62rem; }
+
+  .dash-body { padding: 14px 10px; gap: 12px; }
+  .dash-greeting { font-size: .78rem; }
+
+  /* KPIs — 2 columns on phone */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi { padding: 12px 10px; }
+  .kpi-val { font-size: 1.15rem; }
+  .kpi-label { font-size: .5rem; letter-spacing: .12em; margin-bottom: 8px; }
+  .kpi-delta { font-size: .52rem; }
+
+  /* Cards */
+  .dash-chart { padding: 14px 12px; }
+  .dash-alerts { padding: 14px 12px; }
+  .card-title { font-size: .72rem; }
+  .card-sub { font-size: .55rem; }
+  .chart-svg { height: 110px; }
+  .alert-title { font-size: .68rem; }
+  .alert-desc { font-size: .55rem; }
+  .alert-cta { font-size: .5rem; padding: 2px 7px; }
+
+  /* Table */
+  .dash-table-card { padding: 14px 12px; }
+  .dtable { font-size: .66rem; }
+  .dtable th { font-size: .5rem; letter-spacing: .12em; padding-bottom: 8px; }
+  .dtable td { padding: 8px 0; }
+  .h-dot { font-size: .55rem; }
+
+  /* Donut */
+  .dash-donut-card { padding: 14px 12px; }
+  .donut-svg { width: 90px; height: 90px; }
+  .dl-item { font-size: .62rem; }
+  .dl-val { font-size: .6rem; }
+
+  /* Period selector */
+  .period { padding: 4px 8px; font-size: .52rem; }
+
+  /* Footer */
+  .footer { padding: 40px 16px; }
+  .footer-logo { font-size: 1rem; }
+  .footer-tag { font-size: .72rem; }
+}
 </style>
 </head>
 <body>
