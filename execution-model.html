@@ -441,6 +441,30 @@ body { background: var(--bg); color: var(--white); font-family: var(--sans); lin
   animation: breathe 1.5s ease-in-out infinite;
 }
 
+/* Preview link */
+.qi-preview-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 0 12px; padding: 8px 12px;
+  background: rgba(74,111,165,.06); border: 1px solid rgba(74,111,165,.2);
+  border-radius: 8px; cursor: pointer; transition: all .2s;
+  text-decoration: none;
+}
+.qi-preview-link:hover { border-color: var(--blue); background: rgba(74,111,165,.1); }
+.qi-preview-icon {
+  width: 18px; height: 18px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .6rem; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.qi-preview-icon.klaviyo { background: #2B2D42; }
+.qi-preview-icon.shopify { background: #5E8E3E; }
+.qi-preview-icon.gdocs { background: #4A6FA5; }
+.qi-preview-text {
+  font-size: .7rem; color: var(--blue); font-weight: 500;
+}
+.qi-preview-arrow {
+  font-size: .6rem; color: rgba(74,111,165,.5); margin-left: auto;
+}
+
 /* 3-button layout for communications */
 .qi-actions-comm { display: flex; gap: 6px; }
 .btn-changes {
@@ -926,7 +950,7 @@ const SCENARIOS = [
       { at: 900,  act: 'msg',    from: 'joel', text: 'Those churning subscribers — can you send them something before we lose them?' },
       { at: 2300, act: 'typing' },
       { at: 5200, act: 'msg',    from: 'ai',    text: '3 subscribers showing churn signals. Personalised emails drafted for each:\n\n• <strong>Emma T.</strong> — Single Origins fan, references her last Rotutu order\n• <strong>Marcus R.</strong> — Mug Shot subscriber, free bag of Fun House offer\n• <strong>The Cornstore</strong> — B2B account, Big House volume discount angle\n\n<span class="hl">£380/mo</span> at risk if we lose all three. Emails ready in Klaviyo.' },
-      { at: 7500, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Win-Back Campaign', detail:'3 personalised emails — churning subscribers', chips:['Klaviyo','3 emails','£380/mo at risk'], agent:'CMO Agent', okText:'Approve & Send', draft:'<strong>Emma T.</strong> — "We\'ve missed you! Your favourite Rotutu single origin is back in stock…"\n\n<strong>Marcus R.</strong> — "Still loving espresso? Here\'s a free bag of Mug Shot on us…"\n\n<strong>The Cornstore</strong> — "Your volume qualifies for our wholesale rate — let\'s chat…"', doneText:'3 emails sent via Klaviyo', doneSub:'Open tracking active — results in 48hrs' } }
+      { at: 7500, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Win-Back Campaign', detail:'3 personalised emails — churning subscribers', chips:['Klaviyo','3 emails','£380/mo at risk'], agent:'CMO Agent', okText:'Approve & Send', draftLabel:'Campaign Drafts', draft:'<strong>Emma T.</strong> — "We\'ve missed you! Your favourite Rotutu single origin is back in stock…"\n\n<strong>Marcus R.</strong> — "Still loving espresso? Here\'s a free bag of Mug Shot on us…"\n\n<strong>The Cornstore</strong> — "Your volume qualifies for our wholesale rate — let\'s chat…"', preview:{ icon:'klaviyo', abbr:'K', text:'View full campaign in Klaviyo (draft)' }, doneText:'3 emails sent via Klaviyo', doneSub:'Open tracking active — results in 48hrs' } }
     ], duration: 17000
   },
   {
@@ -954,7 +978,7 @@ const SCENARIOS = [
     steps: [
       { at: 900,  act: 'msg', from: 'ai', text: '📈 <strong>CMO found a subscription opportunity.</strong>\n\n12 Ship Street regulars buy <strong>2+ bags per week</strong> consistently but aren\'t on a subscription. At average sub value of £22/mo, converting 60% would add <span class="hl">~£158/mo</span> in recurring revenue.' },
       { at: 4500, act: 'msg', from: 'ai', text: 'Campaign drafted — personalised to each customer\'s usual blend (Big House, Mug Shot, Luminary) with a 10% first-month discount. Scheduled for Saturday morning to maximise Ship Street footfall crossover.' },
-      { at: 7000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'proactive', title:'Launch Subscription Campaign', detail:'12 Ship Street regulars — personalised blend-specific outreach', chips:['Klaviyo','12 emails','Est. +£158/mo'], agent:'CMO Agent', okText:'Launch Campaign', doneText:'12 personalised emails sent', doneSub:'Conversion tracking live — report in 7 days' } }
+      { at: 7000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'proactive', title:'Launch Subscription Campaign', detail:'12 Ship Street regulars — personalised blend-specific outreach', chips:['Klaviyo','12 emails','Est. +£158/mo'], agent:'CMO Agent', okText:'Approve & Send', preview:{ icon:'klaviyo', abbr:'K', text:'Preview campaign in Klaviyo (draft)' }, doneText:'12 personalised emails sent', doneSub:'Conversion tracking live — report in 7 days' } }
     ], duration: 17000
   },
   {
@@ -964,7 +988,7 @@ const SCENARIOS = [
       { at: 900,  act: 'msg',    from: 'joel', text: 'Add the new Kenya Kiambu to Shopify — £13.00, 250g bags. It\'s a washed process.' },
       { at: 2200, act: 'typing' },
       { at: 5000, act: 'msg',    from: 'ai',    text: 'Product page drafted:\n\n• <strong>Title:</strong> Kenya Kiambu Washed — Spring 2026\n• <strong>Price:</strong> £13.00 / 250g\n• <strong>Tasting notes:</strong> From your roast profile (blackcurrant, brown sugar, citrus)\n• <strong>Tags:</strong> single-origin, seasonal, light-roast, Kenya\n\nImages matched from your existing single-origin library. Subscription option auto-enabled. Ready to publish.' },
-      { at: 7000, act: 'queue', data: { type:'CREATE', cls:'create', trigger:'requested', title:'Publish Product to Shopify', detail:'Kenya Kiambu Washed — Spring 2026 / £13.00 / 250g', chips:['Shopify','£13.00/250g','Kenya','Seasonal'], agent:'CMO Agent', okText:'Publish Product', doneText:'Product live on Shopify', doneSub:'Added to subscription picker + announcement email drafted' } }
+      { at: 7000, act: 'queue', data: { type:'CREATE', cls:'create', trigger:'requested', title:'Publish Product to Shopify', detail:'Kenya Kiambu Washed — Spring 2026 / £13.00 / 250g', chips:['Shopify','£13.00/250g','Kenya','Seasonal'], agent:'CMO Agent', okText:'Publish Live', preview:{ icon:'shopify', abbr:'S', text:'Preview product page in Shopify (draft)' }, doneText:'Product live on Shopify', doneSub:'Added to subscription picker + announcement email drafted' } }
     ], duration: 17000
   },
   {
@@ -1075,11 +1099,22 @@ function showQueueItem(d) {
   qCountEl.classList.remove('zero');
 
   const isComm = !!d.draft;
+  const hasPreview = !!d.preview;
+  const needsReview = isComm || hasPreview;
   const item = document.createElement('div');
   item.className = 'q-item';
   item.dataset.doneText = d.doneText;
   item.dataset.doneSub  = d.doneSub;
   item.dataset.title    = d.title;
+
+  let previewHtml = '';
+  if (isComm) {
+    previewHtml = `<div class="qi-draft" id="qidraft_${current}"><div class="qi-draft-label">${d.draftLabel || 'Email Preview'}</div><div class="qi-draft-text">${d.draft}</div></div>`;
+  }
+  if (hasPreview) {
+    previewHtml += `<div class="qi-preview-link" onclick="event.preventDefault()"><div class="qi-preview-icon ${d.preview.icon}">${d.preview.abbr}</div><div class="qi-preview-text">${d.preview.text}</div><div class="qi-preview-arrow">↗</div></div>`;
+  }
+
   item.innerHTML = `
     <div class="qi-top">
       <span class="qi-type ${d.cls}">${d.type}</span>
@@ -1089,13 +1124,13 @@ function showQueueItem(d) {
       <div class="qi-title">${d.title}</div>
       <div class="qi-detail">${d.detail}</div>
       <div class="qi-chips">${d.chips.map(c=>`<span class="qi-chip">${c}</span>`).join('')}</div>
-      ${isComm ? `<div class="qi-draft" id="qidraft_${current}"><div class="qi-draft-label">Email Preview</div><div class="qi-draft-text">${d.draft}</div></div>` : ''}
+      ${previewHtml}
       <div style="margin-bottom:12px"><span class="qi-agent">${d.agent}</span></div>
       <div id="qifeedback_${current}"></div>
       <div id="qirevising_${current}"></div>
-      <div class="${isComm ? 'qi-actions-comm' : 'qi-actions'}" id="qiactions_${current}">
+      <div class="${needsReview ? 'qi-actions-comm' : 'qi-actions'}" id="qiactions_${current}">
         <button class="btn-approve" onclick="approveItem(this)">${d.okText}</button>
-        ${isComm ? '<button class="btn-changes" id="btnChanges_' + current + '">Request Changes</button>' : ''}
+        ${needsReview ? '<button class="btn-changes" id="btnChanges_' + current + '">Request Changes</button>' : ''}
         <button class="btn-decline" onclick="declineItem(this)">Decline</button>
       </div>
     </div>
