@@ -3,794 +3,1789 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IntegrateAI — The Journey: From Discovery to Intelligence</title>
+<title>New Ground Coffee — The Execution Model</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --terra:#D97757;--dark:#1A1A19;--cream:#FAF9F5;--ink:#111110;
-  --grey:#3A3935;--muted:#9A9590;--lterra:#F5E6DE;--lgrey:#F0EFEB;
-  --border:#E5E2DC;--white:#FFFFFF;
-  --green:#4A7C59;--green-bg:rgba(74,124,89,.08);
-  --blue:#4A6FA5;--blue-bg:rgba(74,111,165,.08);
-  --amber:#C4943A;--amber-bg:rgba(196,148,58,.08);
-  --red:#C25B56;--purple:#7B61A5;--purple-bg:rgba(123,97,165,.08);
-  --serif:'DM Serif Display',Georgia,serif;
-  --sans:'Inter',system-ui,sans-serif;
-  --mono:'JetBrains Mono',monospace;
+/* ── RESET & VARIABLES ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  /* Core brand */
+  --bg:         #1A1A19;
+  --bg2:        #111110;
+  --surf:       rgba(255,255,255,.025);
+  --surf2:      rgba(255,255,255,.04);
+  --surf3:      rgba(255,255,255,.06);
+  --border:     rgba(255,255,255,.06);
+  --border2:    rgba(255,255,255,.1);
+  --terra:      #D97757;
+  --terra-dim:  rgba(217,119,87,.08);
+  --terra-glow: rgba(217,119,87,.25);
+  /* Brand semantic colours */
+  --green:      #4A7C59;
+  --green-dim:  rgba(74,124,89,.08);
+  --blue:       #4A6FA5;
+  --blue-dim:   rgba(74,111,165,.08);
+  --amber:      #C4943A;
+  --amber-dim:  rgba(196,148,58,.08);
+  --purple:     #7B61A5;
+  --purple-dim: rgba(123,97,165,.08);
+  --red:        #C25B56;
+  --red-dim:    rgba(194,91,86,.08);
+  /* Text */
+  --white:      #FFFFFF;
+  --muted:      #9A9590;
+  --dim:        rgba(255,255,255,.25);
+  /* Slack (keep dark for realism) */
+  --slack:      #1A1D21;
+  --slack-side: #19171D;
+  --slack-act:  #27242C;
+  --slack-b:    rgba(255,255,255,.08);
+  /* Typography */
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans:  'Inter', system-ui, sans-serif;
+  --mono:  'JetBrains Mono', monospace;
 }
-html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:var(--sans);color:var(--grey);background:var(--dark);line-height:1.6;overflow-x:hidden}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--white); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; }
 
-/* ═══ KEYFRAMES — minimal, elegant ═══ */
-@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(217,119,87,.08)}50%{box-shadow:0 0 40px rgba(217,119,87,.2)}}
-@keyframes numberGlow{0%,100%{opacity:.15}50%{opacity:.35}}
-@keyframes borderTrace{0%{background-position:0% 0%}100%{background-position:200% 0%}}
-@keyframes typingDot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
-@keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
-@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
-@keyframes progressGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 80px 24px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 50% 5%, rgba(217,119,87,.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+}
+.hero-eyebrow {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--terra); margin-bottom: 28px;
+  opacity: 0; animation: fadeUp .7s ease .15s forwards;
+}
+.hero h1 {
+  font-family: var(--serif); font-size: clamp(3.2rem, 8vw, 6.5rem);
+  line-height: 1.04; margin-bottom: 28px;
+  opacity: 0; animation: fadeUp .7s ease .3s forwards;
+}
+.hero h1 em { font-style: italic; color: var(--terra); }
+.hero-sub {
+  font-size: clamp(.9rem, 2vw, 1.1rem); color: var(--muted);
+  max-width: 600px; line-height: 1.75; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp .7s ease .45s forwards;
+}
+.hero-pills {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 60px; opacity: 0; animation: fadeUp .7s ease .6s forwards;
+}
+.pill {
+  padding: 7px 16px; border: 1px solid var(--border2); border-radius: 100px;
+  font-size: .75rem; color: var(--muted); background: var(--surf);
+}
+.pill.hi { border-color: var(--terra); color: var(--terra); background: var(--terra-dim); }
+.scroll-cue {
+  position: absolute; bottom: 36px; display: flex; flex-direction: column;
+  align-items: center; gap: 10px; opacity: 0; animation: fadeUp .7s ease 1s forwards;
+}
+.scroll-cue span { font-size: .68rem; color: var(--dim); letter-spacing: .12em; text-transform: uppercase; }
+.scroll-line {
+  width: 1px; height: 44px;
+  background: linear-gradient(to bottom, var(--terra), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:.3;transform:scaleY(.8)} 50%{opacity:1;transform:scaleY(1)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
-/* ═══════════════════════════════════════
-   SYSTEM FLOW ANIMATION v2
-   ═══════════════════════════════════════ */
+/* ── SECTION HEADERS ── */
+.sec-head { text-align: center; padding: 88px 24px 56px; max-width: 720px; margin: 0 auto; }
+.eyebrow {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--terra); display: block; margin-bottom: 18px;
+}
+.sec-head h2 {
+  font-family: var(--serif); font-size: clamp(2rem, 4.5vw, 3.2rem);
+  line-height: 1.12; margin-bottom: 18px;
+}
+.sec-head p { color: var(--muted); font-size: .95rem; line-height: 1.75; }
 
-/* --- Flow Keyframes --- */
-@keyframes flowPulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
-@keyframes flowPulseHub{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
-@keyframes hubRotateGlow{0%{box-shadow:0 0 30px 8px rgba(217,119,87,.12),0 0 60px 16px rgba(217,119,87,.05)}50%{box-shadow:0 0 40px 12px rgba(217,119,87,.22),0 0 80px 24px rgba(217,119,87,.08)}100%{box-shadow:0 0 30px 8px rgba(217,119,87,.12),0 0 60px 16px rgba(217,119,87,.05)}}
-/* hubRingRotate removed */
-@keyframes connectorShimmer{0%{background-position:-200% center}100%{background-position:200% center}}
-@keyframes scanSweep{0%{left:-30%;opacity:0}10%{opacity:.6}50%{opacity:.6}60%{opacity:0}100%{left:130%;opacity:0}}
-@keyframes dashMetricPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
-/* feedbackLoop removed */
-@keyframes flowNodeEnter{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: all .85s cubic-bezier(.16,1,.3,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* --- Flow Container --- */
-.flow{padding:80px 24px 60px;max-width:960px;margin:0 auto;position:relative}
-.flow-header{text-align:center;margin-bottom:56px}
-.flow-header h2{font-family:var(--serif);color:var(--white);font-size:clamp(1.5rem,3.2vw,2.2rem);font-weight:400;margin-bottom:8px}
-.flow-header p{font-family:var(--sans);font-size:.82rem;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.6}
+/* ── TYPE EXPLAINER ── */
+.type-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 20px; padding: 0 24px 52px; max-width: 700px; margin: 0 auto;
+  flex-wrap: wrap;
+}
+.type-card {
+  flex: 1; min-width: 240px; padding: 18px 20px;
+  background: var(--surf); border: 1px solid var(--border2);
+  border-radius: 10px; display: flex; gap: 14px; align-items: flex-start;
+}
+.type-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+}
+.type-card.proactive .type-dot { background: var(--terra); }
+.type-card.requested .type-dot { background: var(--blue); }
+.type-title { font-size: .82rem; font-weight: 600; color: var(--white); margin-bottom: 5px; }
+.type-desc { font-size: .78rem; color: var(--muted); line-height: 1.55; }
+.type-vs { font-size: 1.4rem; color: var(--dim); }
 
-/* --- Tier Layout --- */
-.flow-tier{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;position:relative;padding:20px 0}
-.flow-tier-label{width:100%;text-align:center;font-family:var(--mono);font-size:.55rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;position:relative}
-.flow-tier-label::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:40px;height:1px;background:currentColor;opacity:.3}
+/* ── SCENARIO TABS ── */
+.scenario-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  padding: 0 24px 32px; max-width: 1140px; margin: 0 auto;
+}
+.stab {
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: .72rem; color: var(--dim); background: var(--surf);
+  cursor: pointer; transition: all .2s; font-family: var(--mono);
+  display: flex; align-items: center; gap: 7px;
+}
+.stab:hover { border-color: var(--border2); color: var(--muted); }
+.stab.active { border-color: var(--terra); color: var(--terra); background: var(--terra-dim); }
+.stab-dot { width: 6px; height: 6px; border-radius: 50%; }
+.stab.proactive .stab-dot { background: var(--terra); }
+.stab.requested .stab-dot { background: var(--blue); }
 
-/* --- Nodes --- */
-.flow-node{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);min-width:80px;text-align:center;transition:border-color .3s,background .3s;will-change:opacity,transform}
-.flow-node-icon{font-size:1.3rem;line-height:1;display:block}
-.flow-node-name{font-family:var(--mono);font-size:.55rem;font-weight:600;letter-spacing:.06em;color:var(--muted);line-height:1.3}
+/* ── DEMO GRID ── */
+.demo-outer { padding: 0 24px 100px; }
+.demo-grid {
+  max-width: 1140px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 400px; gap: 18px; align-items: start;
+}
+@media(max-width:960px){ .demo-grid{grid-template-columns:1fr;} }
 
-/* Node pulse by tier — staggered */
-.flow-sources .flow-node{animation:flowPulse 4s ease-in-out infinite;border-color:rgba(74,124,89,.15);background:rgba(74,124,89,.04)}
-.flow-sources .flow-node:nth-child(n+2){animation-delay:calc((var(--i,0)) * .4s)}
-.flow-sources .flow-node:nth-child(2){--i:1}.flow-sources .flow-node:nth-child(3){--i:2}.flow-sources .flow-node:nth-child(4){--i:3}.flow-sources .flow-node:nth-child(5){--i:4}.flow-sources .flow-node:nth-child(6){--i:5}
-
-.flow-agents .flow-node{animation:flowPulse 5s ease-in-out infinite;border-color:rgba(217,119,87,.15);background:rgba(217,119,87,.04)}
-.flow-agents .flow-node:nth-child(n+2){animation-delay:calc((var(--i,0)) * .6s)}
-.flow-agents .flow-node:nth-child(2){--i:1}.flow-agents .flow-node:nth-child(3){--i:2}
-
-/* --- C-Suite Hub (central focal point) --- */
-.flow-hub-wrap{position:relative;display:flex;justify-content:center;padding:28px 0}
-.flow-hub{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:520px;padding:28px 24px;border-radius:16px;border:1px solid rgba(217,119,87,.18);background:rgba(217,119,87,.04);animation:hubRotateGlow 6s ease-in-out infinite}
-/* hub orbit ring removed */
-.flow-hub .flow-tier-label{color:var(--terra)}
-.flow-hub .flow-node{border-color:rgba(217,119,87,.12);background:rgba(217,119,87,.06);min-width:70px;padding:10px 12px}
-.flow-hub .flow-node{animation:flowPulseHub 5s ease-in-out infinite}
-.flow-hub .flow-node:nth-child(2){animation-delay:0s}.flow-hub .flow-node:nth-child(3){animation-delay:.8s}.flow-hub .flow-node:nth-child(4){animation-delay:1.6s}.flow-hub .flow-node:nth-child(5){animation-delay:2.4s}.flow-hub .flow-node:nth-child(6){animation-delay:3.2s}.flow-hub .flow-node:nth-child(7){animation-delay:4s}
-
-/* --- Shimmer Connectors between tiers --- */
-.flow-connector{display:flex;justify-content:center;align-items:center;padding:6px 0;position:relative;height:48px;overflow:visible}
-.flow-connector-line{width:3px;height:100%;border-radius:2px;position:relative;overflow:hidden}
-.flow-connector-line::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,var(--conn-color,var(--green)),transparent);background-size:100% 200%;animation:connectorShimmer 2.5s ease-in-out infinite}
-.flow-connector-arrows{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.55rem;color:var(--conn-color,var(--green));opacity:.5;animation:flowPulse 3s ease-in-out infinite}
-.flow-conn-green{--conn-color:var(--green)}
-.flow-conn-terra{--conn-color:var(--terra)}
-.flow-conn-blue{--conn-color:var(--blue)}
-.flow-conn-purple{--conn-color:var(--purple)}
-.flow-conn-amber{--conn-color:var(--amber)}
-
-/* --- Dashboard Widget (polished) --- */
-.flow-dash{max-width:480px;margin:0 auto;position:relative;overflow:hidden;border-radius:16px;border:1px solid rgba(74,111,165,.18);background:linear-gradient(165deg,rgba(74,111,165,.06) 0%,rgba(26,26,25,.95) 50%,rgba(217,119,87,.04) 100%);padding:0;box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.04)}
-.flow-dash::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue),var(--amber),var(--terra));background-size:300% 100%;animation:connectorShimmer 4s linear infinite}
-.flow-dash-header{padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between}
-.flow-dash-title{font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin:0}
-.flow-dash-live{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.48rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--green)}
-.flow-dash-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:flowPulse 2s ease-in-out infinite}
-.flow-dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:16px 0 0}
-.flow-dash-cell{padding:14px 24px;position:relative}
-.flow-dash-cell:nth-child(1){border-right:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04)}
-.flow-dash-cell:nth-child(2){border-bottom:1px solid rgba(255,255,255,.04)}
-.flow-dash-cell:nth-child(3){border-right:1px solid rgba(255,255,255,.04)}
-.flow-dash-metric{font-family:var(--mono);font-size:.5rem;color:var(--muted);letter-spacing:.04em;margin-bottom:4px;display:block}
-.flow-dash-val{font-family:var(--mono);font-size:1rem;font-weight:700;display:block;animation:dashMetricPulse 3.5s ease-in-out infinite}
-.flow-dash-cell:nth-child(1) .flow-dash-val{color:var(--green);animation-delay:0s}
-.flow-dash-cell:nth-child(2) .flow-dash-val{color:var(--blue);animation-delay:.5s}
-.flow-dash-cell:nth-child(3) .flow-dash-val{color:var(--amber);animation-delay:1s}
-.flow-dash-cell:nth-child(4) .flow-dash-val{color:var(--terra);animation-delay:1.5s}
-.flow-dash-bar{height:2px;border-radius:1px;margin-top:6px;opacity:.35}
-.flow-dash-footer{padding:10px 24px;background:rgba(255,255,255,.015);border-top:1px solid rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;gap:6px}
-.flow-dash-footer span{font-family:var(--mono);font-size:.45rem;color:rgba(255,255,255,.2);letter-spacing:.1em;text-transform:uppercase}
-
-@media(max-width:600px){
-  .flow-dash{max-width:100%}
-  .flow-dash-cell{padding:10px 16px}
-  .flow-dash-val{font-size:.85rem}
+/* ── SLACK ── */
+.slack-wrap {
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--slack-b); background: var(--slack);
+  min-height: 560px; display: flex; flex-direction: column;
+}
+.slack-titlebar {
+  background: #161416; border-bottom: 1px solid var(--slack-b);
+  padding: 11px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.mac-dots { display: flex; gap: 6px; }
+.mac-dot { width: 12px; height: 12px; border-radius: 50%; }
+.mac-dot.r{background:#FF5F57} .mac-dot.y{background:#FFBD2E} .mac-dot.g{background:#28CA41}
+.slack-title-text { margin: 0 auto; font-size: .75rem; color: var(--dim); }
+.slack-layout { display: grid; grid-template-columns: 200px 1fr; flex: 1; min-height: 0; }
+.slack-sidebar {
+  background: var(--slack-side); border-right: 1px solid var(--slack-b);
+  padding: 14px 0; overflow: hidden;
+}
+.sidebar-ws {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px 14px;
+}
+.sidebar-ws-icon {
+  width: 26px; height: 26px; background: var(--terra);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-size: .66rem; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.sidebar-ws-name { font-size: .8rem; font-weight: 700; color: var(--white); }
+.sidebar-section {
+  font-size: .65rem; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--dim); padding: 10px 12px 4px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 12px; font-size: .8rem; color: #7A7A8A; cursor: pointer;
+}
+.sidebar-item::before { content: '#'; font-size: .72rem; color: var(--dim); }
+.sidebar-item.dm::before { content: '●'; font-size: .5rem; color: var(--dim); }
+.sidebar-item.act { background: var(--slack-act); color: var(--white); border-radius: 4px; }
+.sidebar-bdg {
+  margin-left: auto; background: var(--terra); color: #fff;
+  font-size: .6rem; font-weight: 700; padding: 1px 5px; border-radius: 8px;
+}
+/* Slack Main */
+.slack-main { display: flex; flex-direction: column; min-height: 0; }
+.slack-cbar {
+  padding: 10px 14px; border-bottom: 1px solid var(--slack-b);
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.cbar-hash { font-size: .9rem; color: var(--dim); }
+.cbar-name { font-size: .85rem; font-weight: 700; color: var(--white); }
+.cbar-trigger {
+  margin-left: auto; font-size: .65rem; font-weight: 700;
+  padding: 3px 9px; border-radius: 10px; letter-spacing: .06em;
+}
+.cbar-trigger.proactive { background: var(--terra-dim); color: var(--terra); }
+.cbar-trigger.requested { background: var(--blue-dim); color: var(--blue); }
+.cbar-trigger.empty { opacity: 0; }
+/* Messages */
+.slack-msgs {
+  flex: 1; padding: 18px 14px; display: flex; flex-direction: column;
+  gap: 14px; overflow-y: auto; min-height: 320px;
+}
+.slack-msg {
+  display: flex; gap: 10px; align-items: flex-start;
+  opacity: 0; transform: translateY(7px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.slack-msg.in { opacity: 1; transform: translateY(0); }
+.msg-av {
+  width: 34px; height: 34px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .68rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+}
+.msg-av.human { background: linear-gradient(135deg,#3B82F6,#6366F1); color:#fff; }
+.msg-av.joel { background: linear-gradient(135deg,#22C55E,#16A34A); color:#fff; }
+.msg-av.ai { background: linear-gradient(135deg,#D97757,#C05A3A); color:#fff; }
+.msg-body {}
+.msg-head { display: flex; align-items: baseline; gap: 7px; margin-bottom: 3px; }
+.msg-name { font-size: .82rem; font-weight: 700; color: var(--white); }
+.msg-name.ai-name { color: var(--terra); }
+.msg-bot {
+  font-size: .58rem; background: var(--terra-dim); color: var(--terra);
+  border: 1px solid rgba(217,119,87,.25); padding: 1px 5px;
+  border-radius: 3px; font-weight: 600; letter-spacing: .05em;
+}
+.msg-time { font-size: .7rem; color: var(--dim); }
+.msg-text {
+  font-size: .82rem; color: #C8C9CB; line-height: 1.58; white-space: pre-wrap;
+}
+.msg-text strong { color: var(--white); }
+.hl {
+  background: rgba(217,119,87,.12); color: var(--terra);
+  padding: 0 4px; border-radius: 3px; font-family: var(--mono); font-size: .85em;
+}
+.msg-react {
+  margin-top: 6px; display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border: 1px solid var(--slack-b); border-radius: 18px;
+  font-size: .75rem; color: var(--muted); background: rgba(255,255,255,.02);
+}
+/* Execution confirmation message */
+.msg-confirm {
+  margin-top: 4px; padding: 9px 12px;
+  background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.18);
+  border-left: 3px solid var(--green); border-radius: 6px;
+}
+.msg-confirm-top {
+  font-size: .8rem; font-weight: 700; color: var(--green); margin-bottom: 3px;
+  display: flex; align-items: center; gap: 6px;
+}
+.msg-confirm-sub { font-size: .74rem; color: var(--muted); line-height: 1.45; }
+/* Typing */
+.typing-wrap {
+  padding: 0 14px 12px; display: flex; gap: 10px; align-items: center;
+  opacity: 0; transition: opacity .3s; flex-shrink: 0;
+}
+.typing-wrap.show { opacity: 1; }
+.typing-av {
+  width: 34px; height: 34px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .68rem; font-weight: 700; flex-shrink: 0;
+  background: linear-gradient(135deg,#D97757,#C05A3A); color:#fff;
+}
+.typing-bubble {
+  display: flex; gap: 4px; align-items: center;
+  padding: 9px 14px; background: var(--surf2); border-radius: 16px;
+}
+.td { width: 7px; height: 7px; background: var(--muted); border-radius: 50%; animation: tdBounce 1.1s ease infinite; }
+.td:nth-child(2){animation-delay:.18s} .td:nth-child(3){animation-delay:.36s}
+@keyframes tdBounce { 0%,100%{transform:translateY(0);opacity:.4} 40%{transform:translateY(-5px);opacity:1} }
+/* Input bar */
+.slack-inputbar {
+  padding: 10px 14px; border-top: 1px solid var(--slack-b); flex-shrink: 0;
+}
+.slack-input-mock {
+  background: var(--surf2); border: 1px solid var(--slack-b);
+  border-radius: 7px; padding: 8px 13px; font-size: .8rem; color: var(--dim);
 }
 
-/* --- Intelligence Scan Tier --- */
-.flow-intel{position:relative;overflow:hidden;border-radius:14px;border:1px solid rgba(217,119,87,.1);padding:20px;background:rgba(255,255,255,.015)}
-.flow-intel::after{content:'';position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,transparent,rgba(217,119,87,.08),transparent);animation:scanSweep 5s ease-in-out infinite;pointer-events:none}
-.flow-intel .flow-tier-label{color:var(--terra)}
+/* ── QUEUE PANEL ── */
+.queue-panel {
+  border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surf); overflow: hidden; position: sticky; top: 20px;
+}
+.qp-head {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.qp-title {
+  font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .14em; color: var(--muted);
+}
+.qp-count {
+  background: var(--terra); color: #fff; font-size: .65rem;
+  font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  transition: all .3s;
+}
+.qp-count.zero { background: var(--surf3); color: var(--dim); }
+.qp-body { padding: 14px; min-height: 440px; display: flex; flex-direction: column; gap: 10px; }
+/* Empty state */
+.q-empty {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px; color: var(--dim);
+}
+.q-empty-icon { font-size: 2rem; opacity: .3; }
+.q-empty-text { font-size: .78rem; text-align: center; line-height: 1.5; }
+/* Queue item */
+.q-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--surf2); overflow: hidden;
+  opacity: 0; transform: translateX(16px);
+  transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1),
+              border-color .4s, background .4s;
+}
+.q-item.in { opacity: 1; transform: translateX(0); }
+.q-item.approved { border-color: var(--green); background: rgba(34,197,94,.04); }
+.q-item.declined { border-color: var(--dim); opacity: .45; }
+.qi-top {
+  padding: 10px 13px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.qi-type {
+  font-size: .62rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+}
+.qi-type.pay    { background:var(--green-dim);  color:var(--green);  }
+.qi-type.send   { background:var(--blue-dim);   color:var(--blue);   }
+.qi-type.update { background:var(--amber-dim);  color:var(--amber);  }
+.qi-type.create { background:var(--purple-dim); color:var(--purple); }
+.qi-type.change { background:var(--terra-dim);  color:var(--terra);  }
+.qi-type.order  { background:rgba(34,197,94,.08);color:#4ADE80;      }
+.qi-badge {
+  margin-left: auto; font-size: .62rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+}
+.qi-badge.proactive { background:var(--terra-dim); color:var(--terra); }
+.qi-badge.requested { background:var(--blue-dim);  color:var(--blue);  }
+.qi-body { padding: 12px 13px; }
+.qi-title { font-size: .85rem; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+.qi-detail { font-size: .76rem; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+.qi-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 13px; }
+.qi-chip {
+  font-size: .67rem; padding: 2px 7px; background: var(--surf3);
+  border: 1px solid var(--border2); border-radius: 3px; color: var(--muted);
+  font-family: var(--mono);
+}
+.qi-agent { font-size: .67rem; color: var(--terra); font-family: var(--mono); }
+.qi-actions { display: flex; gap: 7px; }
+.btn-approve {
+  flex: 1; padding: 9px; background: var(--green); color: #fff;
+  border: none; border-radius: 7px; font-size: .8rem; font-weight: 600;
+  cursor: pointer; transition: all .2s; font-family: var(--sans);
+}
+.btn-approve:hover { background: #1aab4d; transform: translateY(-1px); }
+.btn-decline {
+  padding: 9px 14px; background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 7px;
+  font-size: .8rem; cursor: pointer; transition: all .2s; font-family: var(--sans);
+}
+.btn-decline:hover { border-color: var(--red); color: var(--red); }
+/* Confirmed state */
+.qi-done {
+  padding: 20px 13px; text-align: center; display: none;
+  flex-direction: column; align-items: center; gap: 8px;
+}
+.qi-done.show { display: flex; }
+.qi-done-check { font-size: 1.6rem; }
+.qi-done-text { font-size: .82rem; font-weight: 700; color: var(--green); }
+.qi-done-sub { font-size: .73rem; color: var(--muted); }
+/* Draft preview (communications) */
+.qi-draft {
+  margin: 0 0 12px; padding: 10px 11px;
+  background: rgba(255,255,255,.025); border: 1px solid var(--border);
+  border-radius: 8px; position: relative;
+}
+.qi-draft-label {
+  font-size: .55rem; font-family: var(--mono); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .16em; color: var(--terra);
+  margin-bottom: 7px;
+}
+.qi-draft-text {
+  font-size: .72rem; color: var(--muted); line-height: 1.6;
+  white-space: pre-wrap; font-family: var(--sans);
+}
+.qi-draft-text strong { color: var(--white); font-weight: 500; }
+.qi-draft.revised {
+  border-color: rgba(74,124,89,.3); background: rgba(74,124,89,.04);
+  animation: draftFadeIn .5s ease;
+}
+.qi-draft.revised .qi-draft-label { color: var(--green); }
+.qi-draft.revised .qi-draft-label::after { content: ' · v2'; }
+@keyframes draftFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- Output Row --- */
-.flow-output{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
-.flow-output-card{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px 20px;background:rgba(255,255,255,.025);text-align:center;flex:1;min-width:140px;max-width:200px;transition:border-color .3s}
-.flow-output-card h4{font-family:var(--serif);font-size:.85rem;color:var(--white);margin-bottom:4px;font-weight:400}
-.flow-output-card p{font-family:var(--mono);font-size:.52rem;color:var(--muted);line-height:1.4}
-
-/* Feedback loop section removed */
-
-/* --- Flow Responsive --- */
-@media(max-width:600px){
-  .flow{padding:60px 16px 40px}
-  .flow-node{min-width:60px;padding:10px 10px;gap:4px}
-  .flow-node-icon{font-size:1rem}
-  .flow-node-name{font-size:.48rem}
-  .flow-hub{padding:20px 16px;gap:8px}
-  .flow-hub .flow-node{min-width:56px;padding:8px 8px}
-  /* hub orbit removed from mobile too */
-  .flow-dash{max-width:100%;padding:16px}
-  .flow-output{gap:8px}
-  .flow-output-card{min-width:100px;max-width:none;flex:none;width:calc(50% - 4px);padding:12px 14px}
-  .flow-output-card h4{font-size:.75rem}
-  .flow-connector{height:36px}
+/* Revision feedback */
+.qi-feedback {
+  margin: 0 0 12px; padding: 9px 11px;
+  background: rgba(196,148,58,.04); border: 1px solid rgba(196,148,58,.2);
+  border-left: 3px solid var(--amber); border-radius: 6px;
+  animation: draftFadeIn .4s ease;
+}
+.qi-feedback-label {
+  font-size: .55rem; font-family: var(--mono); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .12em; color: var(--amber);
+  margin-bottom: 4px;
+}
+.qi-feedback-text {
+  font-size: .72rem; color: var(--white); line-height: 1.5; font-style: italic;
+}
+.qi-revising {
+  padding: 10px 0; display: flex; align-items: center; gap: 8px;
+  font-size: .72rem; color: var(--muted); animation: draftFadeIn .3s ease;
+}
+.qi-revising-dot {
+  width: 5px; height: 5px; background: var(--terra); border-radius: 50%;
+  animation: breathe 1.5s ease-in-out infinite;
 }
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,26,25,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(217,119,87,.15);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-family:var(--serif);color:var(--white);font-size:.95rem}
-.nav-logo span{color:var(--terra)}
-.nav-pills{display:flex;gap:4px}
-.nav-pill{padding:6px 14px;border-radius:20px;font-size:.6rem;font-weight:600;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--muted);transition:all .3s;border:1px solid transparent}
-.nav-pill:hover,.nav-pill.active{color:var(--terra);border-color:rgba(217,119,87,.2);background:rgba(217,119,87,.06)}
-@media(max-width:768px){.nav-pills{display:none}}
-
-/* SECTIONS */
-section{padding:100px 24px 80px;max-width:1100px;margin:0 auto}
-.full-dark{background:var(--dark)}.full-light{background:var(--cream)}.full-white{background:var(--white)}
-
-/* TYPE */
-.label{font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);margin-bottom:10px;display:block}
-h2{font-family:var(--serif);font-weight:400;line-height:1.12;color:var(--dark);font-size:clamp(1.8rem,3.5vw,2.6rem);margin-bottom:16px}
-h3{font-family:var(--serif);font-weight:400;color:var(--dark);font-size:1.15rem}
-.subtitle{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:.95rem}
-
-/* REVEAL — scroll-triggered via JS IntersectionObserver */
-/* Default: everything visible (fallback if JS fails) */
-.reveal{opacity:1;transform:translateY(0)}
-.reveal .stg{opacity:1;transform:translateY(0)}
-/* When JS is active: hide until scrolled into view */
-.js .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
-.js .reveal.visible{opacity:1;transform:translateY(0)}
-/* Staggered children */
-.js .reveal .stg{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
-.js .reveal.visible .stg{opacity:1;transform:translateY(0)}
-.js .reveal.visible .stg:nth-child(1){transition-delay:.1s}
-.js .reveal.visible .stg:nth-child(2){transition-delay:.2s}
-.js .reveal.visible .stg:nth-child(3){transition-delay:.3s}
-.js .reveal.visible .stg:nth-child(4){transition-delay:.4s}
-.js .reveal.visible .stg:nth-child(5){transition-delay:.5s}
-.js .reveal.visible .stg:nth-child(6){transition-delay:.6s}
-/* Hero gets its own entrance */
-.js .hero{opacity:0;transform:translateY(30px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
-.js .hero.visible{opacity:1;transform:translateY(0)}
-
-/* ═══════════════════════════════════════
-   HERO
-   ═══════════════════════════════════════ */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;padding:100px 24px 60px}
-.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--terra)}
-
-/* Hero background — subtle static glow */
-.hero-bg{position:absolute;inset:0;pointer-events:none}
-.hero-glow{position:absolute;top:50%;left:50%;width:600px;height:600px;margin:-300px 0 0 -300px;border-radius:50%;background:radial-gradient(circle,rgba(217,119,87,.06),transparent 70%)}
-
-.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,5.5vw,4.2rem);color:var(--white);max-width:800px;margin-bottom:16px;position:relative;z-index:1;line-height:1.08}
-.hero h1 em{font-style:italic;background:linear-gradient(90deg,var(--terra),#e8a080,var(--terra));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 6s linear infinite}
-.hero .label{position:relative;z-index:1}
-.hero .tagline{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:clamp(.9rem,1.6vw,1.15rem);max-width:600px;margin-bottom:56px;position:relative;z-index:1}
-
-/* Journey map pills */
-.journey-map{display:flex;gap:0;position:relative;z-index:1;width:100%;max-width:820px}
-.jm-phase{flex:1;padding:20px 16px;text-align:center;position:relative;border:1px solid rgba(255,255,255,.06);transition:transform .3s}
-.jm-phase:hover{transform:translateY(-3px)}
-.jm-phase:first-child{border-radius:12px 0 0 12px}.jm-phase:last-child{border-radius:0 12px 12px 0}
-.jm-phase.p1{background:rgba(74,124,89,.08);border-color:rgba(74,124,89,.15)}
-.jm-phase.p2{background:rgba(74,111,165,.08);border-color:rgba(74,111,165,.15)}
-.jm-phase.p3{background:rgba(217,119,87,.08);border-color:rgba(217,119,87,.15)}
-.jm-phase.p4{background:rgba(123,97,165,.08);border-color:rgba(123,97,165,.15)}
-.jm-num{font-family:var(--mono);font-size:.5rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
-.p1 .jm-num{color:var(--green)}.p2 .jm-num{color:var(--blue)}.p3 .jm-num{color:var(--terra)}.p4 .jm-num{color:var(--purple)}
-.jm-name{font-family:var(--serif);font-size:.95rem;color:var(--white);margin-bottom:2px}
-.jm-time{font-family:var(--mono);font-size:.5rem;color:var(--muted)}
-.jm-arrow{position:absolute;right:-8px;top:50%;transform:translateY(-50%);z-index:2;color:var(--muted);font-size:.7rem}
-/* Animated signal dots on pills */
-.jm-signal{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%}
-.p1 .jm-signal{background:var(--green);animation:breathe 3s ease-in-out infinite}.p2 .jm-signal{background:var(--blue);animation:breathe 3s .7s ease-in-out infinite}.p3 .jm-signal{background:var(--terra);animation:breathe 3s 1.4s ease-in-out infinite}.p4 .jm-signal{background:var(--purple);animation:breathe 3s 2.1s ease-in-out infinite}
-@media(max-width:600px){.journey-map{flex-direction:column;gap:4px}.jm-phase{border-radius:8px !important}.jm-arrow{display:none}}
-
-/* ═══════════════════════════════════════
-   PHASE HEADERS
-   ═══════════════════════════════════════ */
-.phase-hero{display:flex;align-items:center;gap:20px;margin-bottom:32px}
-.phase-number{font-family:var(--mono);font-size:3.5rem;font-weight:600;line-height:1;position:relative}
-.phase-number::before{content:'';position:absolute;top:50%;left:50%;width:80px;height:80px;margin:-40px 0 0 -40px;border-radius:50%;animation:numberGlow 4s ease-in-out infinite}
-.p1-color{color:var(--green)}.p1-color::before{background:radial-gradient(circle,rgba(74,124,89,.2),transparent 70%)}
-.p2-color{color:var(--blue)}.p2-color::before{background:radial-gradient(circle,rgba(74,111,165,.2),transparent 70%)}
-.p3-color{color:var(--terra)}.p3-color::before{background:radial-gradient(circle,rgba(217,119,87,.2),transparent 70%)}
-.p4-color{color:var(--purple)}.p4-color::before{background:radial-gradient(circle,rgba(123,97,165,.2),transparent 70%)}
-.phase-meta{font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;display:block}
-
-/* Phase grids */
-.phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
-@media(max-width:768px){.phase-grid{grid-template-columns:1fr}}
-
-.phase-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px;transition:transform .3s,box-shadow .3s}
-.phase-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
-.phase-card-dark{background:var(--dark);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px;transition:transform .3s,box-shadow .3s}
-.phase-card-dark:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
-.phase-card-dark h4{color:var(--white)}.phase-card-dark p{color:var(--muted)}
-.pc-icon{font-size:1.3rem;margin-bottom:10px;display:block;transition:transform .3s}
-.phase-card:hover .pc-icon,.phase-card-dark:hover .pc-icon{transform:scale(1.05)}
-.phase-card h4,.phase-card-dark h4{font-family:var(--serif);font-size:1rem;margin-bottom:6px}
-.phase-card p,.phase-card-dark p{font-size:.8rem;line-height:1.55;color:var(--muted)}
-
-/* ═══════════════════════════════════════
-   PHASE 1: DISCOVERY
-   ═══════════════════════════════════════ */
-.day-timeline{display:flex;flex-direction:column;gap:0;margin-top:32px;position:relative}
-/* Timeline dot — static */
-
-.day-row{display:grid;grid-template-columns:80px 1fr;gap:0;border-bottom:1px solid var(--border);transition:background .3s}
-.day-row:hover .day-content{background:var(--white)}
-.day-label-col{padding:20px 16px;background:var(--white);display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid;position:relative}
-.day-label-col.green-line{border-right-color:var(--green)}
-/* Pulsing dot on timeline — continuous */
-.day-label-col::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--cream)}
-.day-content{padding:20px 24px;background:var(--cream);transition:background .3s}
-.day-content h4{font-family:var(--serif);font-size:.95rem;color:var(--dark);margin-bottom:4px}
-.day-content p{font-size:.78rem;color:var(--muted);line-height:1.5}
-.day-num{font-family:var(--mono);font-size:.6rem;color:var(--green);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
-.day-icon{font-size:1.1rem;margin-top:4px;transition:transform .3s}
-.day-row:hover .day-icon{transform:scale(1.05)}
-@media(max-width:480px){.day-row{grid-template-columns:60px 1fr}.day-label-col{padding:12px 8px}}
-
-/* Question cards */
-.q-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
-.q-card{background:var(--lgrey);border:1px solid var(--border);border-radius:8px;padding:16px;transition:transform .3s,border-color .3s}
-.q-card:hover{transform:translateY(-3px);border-color:var(--green)}
-.q-card .q-agent{font-family:var(--mono);font-size:.5rem;color:var(--green);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;display:block}
-.q-card p{font-size:.75rem;color:var(--dark);font-style:italic;line-height:1.4}
-@media(max-width:768px){.q-grid{grid-template-columns:1fr}}
-
-/* ═══════════════════════════════════════
-   PHASE 2: DASHBOARD
-   ═══════════════════════════════════════ */
-.dash-build{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;position:relative}
-.db-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
-.db-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--blue);transform:scaleX(0);transition:transform .4s;transform-origin:left}
-.db-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
-.db-card:hover::after{transform:scaleX(1)}
-.db-card .db-icon{font-size:1.5rem;margin-bottom:8px;display:block;transition:transform .3s}
-.db-card:hover .db-icon{transform:scale(1.05)}
-.db-card h4{font-family:var(--serif);font-size:.9rem;color:var(--dark);margin-bottom:4px}
-.db-card p{font-size:.72rem;color:var(--muted);line-height:1.4}
-.db-card .db-source{margin-top:10px;display:inline-block;font-family:var(--mono);font-size:.5rem;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--blue-bg);color:var(--blue);transition:all .3s}
-.db-card:hover .db-source{background:var(--blue);color:var(--white)}
-@media(max-width:768px){.dash-build{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.dash-build{grid-template-columns:1fr}}
-
-/* ═══════════════════════════════════════
-   PHASE 3: INTELLIGENCE
-   ═══════════════════════════════════════ */
-/* Intelligence cards — subtle animated glow on top border */
-#intelGrid .phase-card{position:relative;overflow:hidden}
-#intelGrid .phase-card::after{content:'';position:absolute;top:-1px;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,rgba(217,119,87,.3),transparent);background-size:200% 100%;animation:borderTrace 4s linear infinite;filter:blur(3px)}
-
-/* Slack mockup */
-.slack-mock{max-width:600px;margin:32px auto 0;background:#1A1D21;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06)}
-.slack-header{background:#222529;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
-.slack-hash{color:#E8912D;font-size:.9rem;font-weight:700}
-.slack-channel{color:var(--white);font-size:.8rem;font-weight:600}
-/* Live status dot */
-.slack-status{width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:auto;animation:breathe 2s infinite}
-.slack-body{padding:16px}
-.slack-msg{display:flex;gap:10px;margin-bottom:16px}
-.slack-msg:last-child{margin-bottom:0}
-.slack-avatar{width:32px;height:32px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--white)}
-.slack-avatar.human{background:#4A9C6D}
-.slack-avatar.ai{background:linear-gradient(135deg,var(--terra),#c06545)}
-.slack-text{flex:1}
-.slack-name{font-size:.75rem;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
-.slack-name .time{font-size:.55rem;color:#616061;font-weight:400}
-.slack-name .bot-badge{font-size:.5rem;background:rgba(217,119,87,.15);color:var(--terra);padding:1px 6px;border-radius:3px;font-weight:600}
-.slack-p{font-size:.78rem;color:#D1D2D3;line-height:1.5;margin-top:2px}
-.slack-p strong{color:var(--white)}
-.slack-reaction{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:2px 8px;margin-top:6px;font-size:.6rem;color:#D1D2D3}
-/* Typing indicator — animated dots */
-.typing{display:flex;gap:4px;padding:8px 0 8px 42px;height:0;overflow:hidden;opacity:0;transition:opacity .3s,height .3s}
-.typing.show{opacity:1;height:28px}
-.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--muted)}
-.typing-dot:nth-child(1){animation:typingDot 1.4s infinite}
-.typing-dot:nth-child(2){animation:typingDot 1.4s .2s infinite}
-.typing-dot:nth-child(3){animation:typingDot 1.4s .4s infinite}
-
-/* ═══════════════════════════════════════
-   PHASE 4: OPERATIONS
-   ═══════════════════════════════════════ */
-.ops-ladder{display:flex;flex-direction:column;gap:0;margin-top:32px;border-radius:12px;overflow:hidden}
-.ops-rung{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid rgba(255,255,255,.04);transition:background .3s}
-.ops-rung:hover{background:rgba(255,255,255,.015)}
-.ops-phase{padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
-.ops-phase .ops-when{font-family:var(--mono);font-size:.5rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
-.ops-phase .ops-mode{font-family:var(--serif);font-size:.85rem}
-/* Breathing progress fill inside each ops phase */
-.ops-phase::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;transform-origin:left;transform:scaleX(0)}
-.ops-rung:nth-child(1) .ops-phase::after{background:var(--green);transform:scaleX(1)}
-.ops-rung:nth-child(2) .ops-phase::after{background:var(--blue);transform:scaleX(1)}
-.ops-rung:nth-child(3) .ops-phase::after{background:var(--amber);transform:scaleX(1)}
-.ops-rung:nth-child(4) .ops-phase::after{background:var(--terra);transform:scaleX(1)}
-.ops-detail{padding:20px 24px;background:rgba(255,255,255,.02);border-left:3px solid;transition:padding-left .3s}
-.ops-rung:hover .ops-detail{padding-left:24px}
-.ops-detail h4{font-family:var(--serif);font-size:.9rem;color:var(--white);margin-bottom:4px}
-.ops-detail p{font-size:.75rem;color:var(--muted);line-height:1.5}
-.ops-rung:nth-child(1) .ops-phase{background:rgba(74,124,89,.06)}.ops-rung:nth-child(1) .ops-phase .ops-when{color:var(--green)}.ops-rung:nth-child(1) .ops-phase .ops-mode{color:var(--green)}.ops-rung:nth-child(1) .ops-detail{border-left-color:var(--green)}
-.ops-rung:nth-child(2) .ops-phase{background:rgba(74,111,165,.06)}.ops-rung:nth-child(2) .ops-phase .ops-when{color:var(--blue)}.ops-rung:nth-child(2) .ops-phase .ops-mode{color:var(--blue)}.ops-rung:nth-child(2) .ops-detail{border-left-color:var(--blue)}
-.ops-rung:nth-child(3) .ops-phase{background:rgba(196,148,58,.06)}.ops-rung:nth-child(3) .ops-phase .ops-when{color:var(--amber)}.ops-rung:nth-child(3) .ops-phase .ops-mode{color:var(--amber)}.ops-rung:nth-child(3) .ops-detail{border-left-color:var(--amber)}
-.ops-rung:nth-child(4) .ops-phase{background:rgba(217,119,87,.06)}.ops-rung:nth-child(4) .ops-phase .ops-when{color:var(--terra)}.ops-rung:nth-child(4) .ops-phase .ops-mode{color:var(--terra)}.ops-rung:nth-child(4) .ops-detail{border-left-color:var(--terra)}
-@media(max-width:600px){.ops-rung{grid-template-columns:1fr}.ops-phase{padding:12px 16px}}
-
-/* ═══ CALLOUTS with breathing glow ═══ */
-.callout{border-radius:12px;padding:28px 32px;margin-top:32px;position:relative;overflow:hidden}
-.callout h4{font-family:var(--serif);font-size:1.1rem;margin-bottom:8px}
-.callout p{font-size:.85rem;line-height:1.6}
-.callout::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--terra)}
-.callout-light{background:var(--lterra)}.callout-light h4{color:var(--dark)}.callout-light p{color:var(--grey)}
-.callout-light::before{animation:glowPulse 3s ease-in-out infinite}
-.callout-dark{background:rgba(217,119,87,.06);border:1px solid rgba(217,119,87,.12)}.callout-dark h4{color:var(--white)}.callout-dark p{color:var(--muted)}
-.callout-dark::before{animation:glowPulse 3s ease-in-out infinite}
-
-/* ═══ PROGRESS BARS between sections ═══ */
-.phase-progress{position:relative;height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin:0 auto;max-width:600px;overflow:hidden}
-.phase-progress-fill{height:100%;border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform 1.5s cubic-bezier(.22,.61,.36,1)}
-.pp1{background:var(--green)}.pp2{background:var(--blue)}.pp3{background:var(--terra)}.pp4{background:var(--purple)}
-.phase-progress-fill.filled{transform:scaleX(1)}
-
-/* ═══ PROMISE SECTION ═══ */
-.promise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
-.promise-card{border-radius:12px;padding:24px;text-align:center;border:1px solid rgba(217,119,87,.12);transition:transform .3s,border-color .3s}
-.promise-card:hover{transform:translateY(-4px);border-color:var(--terra)}
-.promise-num{font-family:var(--mono);font-size:1.8rem;font-weight:600;color:var(--terra);display:block}
-.promise-label{font-size:.72rem;color:var(--muted);margin-top:4px;display:block}
-@media(max-width:768px){.promise-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.promise-grid{grid-template-columns:1fr}}
-
-/* Value cards */
-.value-grid{margin-top:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
-@media(max-width:600px){.value-grid{grid-template-columns:1fr;gap:12px}}
-.value-card{text-align:center;padding:24px;transition:transform .3s}
-.value-word{font-family:var(--serif);font-size:1.8rem}
-
-/* Footer */
-.footer-section{text-align:center;padding:80px 24px 48px}
-.footer-section h2{color:var(--white);font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:8px}
-.footer-line{border-top:1px solid rgba(217,119,87,.15);padding-top:24px;margin-top:32px;font-size:.65rem;color:var(--muted)}
-.footer-line a{color:var(--terra);text-decoration:none}
-
-/* ═══ REDUCED MOTION ═══ */
-/* Reduced motion: keep fade reveals (just opacity, no movement) but disable decorative loops */
-@media(prefers-reduced-motion:reduce){
-  .js .reveal,.js .reveal .stg,.js .hero{transform:none !important;transition-duration:.3s !important}
-  .jm-signal,.slack-status,.typing-dot,.phase-number::before,#intelGrid .phase-card::after,.callout-light::before,.callout-dark::before,.hero h1 em,
-  .flow-node,.flow-hub,.flow-hub .flow-node,.flow-connector-line::before,.flow-connector-arrows,.flow-dash::before,.flow-dash-val,.flow-intel::after{animation:none !important}
+/* Preview link */
+.qi-preview-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 0 12px; padding: 8px 12px;
+  background: rgba(74,111,165,.06); border: 1px solid rgba(74,111,165,.2);
+  border-radius: 8px; cursor: pointer; transition: all .2s;
+  text-decoration: none;
 }
-@media print{.nav{display:none}section{padding:30px 16px;page-break-inside:avoid}.reveal,.anim .reveal{opacity:1;transform:none}}
+.qi-preview-link:hover { border-color: var(--blue); background: rgba(74,111,165,.1); }
+.qi-preview-icon {
+  width: 18px; height: 18px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .6rem; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.qi-preview-icon.klaviyo { background: #2B2D42; }
+.qi-preview-icon.shopify { background: #5E8E3E; }
+.qi-preview-icon.gdocs { background: #4A6FA5; }
+.qi-preview-text {
+  font-size: .7rem; color: var(--blue); font-weight: 500;
+}
+.qi-preview-arrow {
+  font-size: .6rem; color: rgba(74,111,165,.5); margin-left: auto;
+}
+
+/* 3-button layout for communications */
+.qi-actions-comm { display: flex; gap: 6px; }
+.btn-changes {
+  flex: 1; padding: 9px; background: transparent; color: var(--amber);
+  border: 1px solid rgba(196,148,58,.3); border-radius: 7px;
+  font-size: .76rem; font-weight: 500; cursor: pointer;
+  transition: all .2s; font-family: var(--sans);
+}
+.btn-changes:hover { border-color: var(--amber); background: rgba(196,148,58,.06); }
+.btn-changes.used {
+  opacity: .4; pointer-events: none; border-style: dashed;
+}
+
+/* Executing pulse */
+.qi-executing {
+  padding: 14px 13px; display: none;
+  flex-direction: column; align-items: center; gap: 10px;
+}
+.qi-executing.show { display: flex; }
+.exec-bar { width: 100%; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.exec-fill { height: 100%; background: var(--green); width: 0; border-radius: 2px; transition: width 1.2s ease; }
+.exec-text { font-size: .75rem; color: var(--muted); }
+
+/* ── PROGRESS BAR ── */
+.adv-bar { height: 3px; background: var(--border); margin-top: 20px; max-width: 1140px; margin-left: auto; margin-right: auto; border-radius: 2px; overflow: hidden; }
+.adv-fill { height: 100%; background: var(--terra); width: 0; }
+
+/* ── DASHBOARD SECTION ── */
+.dashboard-section { background: var(--bg); padding: 0 24px 120px; }
+.browser-wrap { max-width: 1200px; margin: 0 auto; }
+.browser-chrome {
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 60px 120px -20px rgba(0,0,0,.6);
+}
+.browser-bar {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 10px 16px; display: flex; align-items: center; gap: 14px;
+}
+.browser-url {
+  flex: 1; background: var(--surf); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 12px;
+  font-family: var(--mono); font-size: .7rem; color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+}
+.url-lock { color: var(--green); font-size: .68rem; }
+
+/* Dashboard chrome */
+.dash { background: var(--bg); }
+.dash-nav {
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  padding: 0 24px; display: flex; align-items: center; height: 52px; gap: 24px;
+}
+.dash-logo {
+  font-family: var(--serif); font-size: .88rem; color: var(--white);
+  display: flex; align-items: center; gap: 8px; letter-spacing: -.01em;
+}
+.logo-dot { width: 6px; height: 6px; background: var(--terra); border-radius: 50%; }
+.dash-nav-links { display: flex; gap: 0; margin-left: 8px; }
+.dnl {
+  padding: 14px 12px; font-size: .74rem; color: var(--muted); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: color .2s;
+}
+.dnl:hover { color: var(--white); }
+.dnl.act { color: var(--white); border-bottom-color: var(--terra); }
+.dash-nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+.dash-live {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .6rem; color: var(--muted); font-family: var(--mono);
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.live-dot {
+  width: 5px; height: 5px; background: var(--green); border-radius: 50%;
+  animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100%{opacity:.5} 50%{opacity:1} }
+@keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+.dash-updated { font-size: .6rem; color: var(--muted); font-family: var(--mono); letter-spacing: .04em; }
+.dash-bell { display: none; }
+.bell-dot { display: none; }
+.dash-insights-badge { display: none; }
+
+/* Dash body */
+.dash-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+.dash-greeting-row {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; padding-bottom: 4px;
+}
+.dash-greeting { font-size: .88rem; font-weight: 400; color: var(--muted); }
+.dash-greeting span { color: var(--terra); font-weight: 400; }
+.dash-date { font-size: .6rem; color: var(--muted); font-family: var(--mono); margin-top: 4px; letter-spacing: .04em; }
+.period-sel { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.period {
+  padding: 5px 12px; font-size: .6rem;
+  color: var(--muted); cursor: pointer; font-family: var(--mono);
+  border-right: 1px solid var(--border); transition: all .15s;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.period:last-child { border-right: none; }
+.period:hover { color: var(--white); }
+.period.act { background: var(--surf2); color: var(--white); }
+
+/* KPI Cards */
+.kpi-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; }
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+.kpi {
+  background: var(--bg); padding: 18px 16px;
+}
+.kpi.amber-flag .kpi-val { color: var(--amber); }
+.kpi-label {
+  font-size: .6rem; color: var(--terra); text-transform: uppercase;
+  letter-spacing: .2em; margin-bottom: 10px; font-weight: 600;
+  font-family: var(--mono);
+}
+.kpi-val {
+  font-size: 1.6rem; font-weight: 400; color: var(--white);
+  font-family: var(--mono); line-height: 1; margin-bottom: 8px;
+}
+.kpi-delta { font-size: .6rem; display: flex; align-items: center; gap: 3px; font-family: var(--mono); letter-spacing: .02em; }
+.kpi-delta.up { color: var(--green); }
+.kpi-delta.dn { color: var(--red); }
+.kpi-delta.wa { color: var(--amber); }
+
+/* Mid row */
+.dash-mid { display: grid; grid-template-columns: 1fr 280px; gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; }
+@media(max-width:1000px){.dash-mid{grid-template-columns:1fr;}}
+.dash-chart { background: var(--bg); padding: 20px 22px; }
+.dash-alerts { background: var(--bg); padding: 20px 18px; }
+.card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+.card-title { font-size: .78rem; font-weight: 400; color: var(--white); font-family: var(--serif); }
+.card-sub { font-size: .6rem; color: var(--muted); margin-top: 3px; font-family: var(--mono); letter-spacing: .04em; }
+.card-accent { font-size: .6rem; color: var(--muted); font-family: var(--mono); }
+.chart-legend { display: flex; gap: 12px; margin-top: 3px; }
+.leg-item { display: flex; align-items: center; gap: 5px; font-size: .6rem; color: var(--muted); font-family: var(--mono); }
+.leg-dot { width: 6px; height: 6px; border-radius: 2px; }
+
+/* Chart SVG */
+.chart-svg { width: 100%; height: 140px; overflow: visible; }
+
+/* Alert list */
+.alert-list { display: flex; flex-direction: column; gap: 0; }
+.alert-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.alert-item:last-child { border-bottom: none; padding-bottom: 0; }
+.alert-item:first-child { padding-top: 0; }
+.alert-item.in { opacity: 1; transform: translateY(0); }
+.alert-item.w, .alert-item.i, .alert-item.s, .alert-item.e {
+  background: transparent; border-color: var(--border);
+}
+.alert-icon {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
+}
+.alert-item.e .alert-icon { background: var(--red); box-shadow: 0 0 8px rgba(194,91,86,.4); }
+.alert-item.w .alert-icon { background: var(--amber); }
+.alert-item.s .alert-icon { background: var(--green); }
+.alert-item.i .alert-icon { background: var(--blue); }
+.alert-content { flex: 1; }
+.alert-title { font-size: .74rem; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+.alert-desc { font-size: .6rem; color: var(--muted); line-height: 1.6; font-family: var(--mono); }
+.alert-cta {
+  flex-shrink: 0; font-size: .55rem; padding: 3px 10px;
+  border: 1px solid var(--border2); color: var(--muted);
+  border-radius: 20px; background: transparent; cursor: pointer; font-family: var(--mono);
+  white-space: nowrap; margin-top: 1px; transition: all .2s;
+  text-transform: uppercase; letter-spacing: .06em; font-weight: 600;
+}
+.alert-cta:hover { border-color: var(--terra); color: var(--terra); }
+
+/* Bottom row */
+.dash-bot { display: grid; grid-template-columns: 1fr 220px; gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; }
+@media(max-width:1000px){.dash-bot{grid-template-columns:1fr;}}
+.dash-table-card { background: var(--bg); padding: 20px 22px; }
+.dash-donut-card {
+  background: var(--bg); padding: 20px 18px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.dtable { width: 100%; border-collapse: collapse; font-size: .74rem; }
+.dtable th {
+  text-align: left; padding: 0 0 10px 0;
+  font-size: .6rem; text-transform: uppercase; letter-spacing: .2em;
+  color: var(--terra); border-bottom: 1px solid var(--border);
+  font-weight: 600; font-family: var(--mono);
+}
+.dtable td { padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
+.dtable td:first-child { color: var(--white); font-weight: 500; }
+.dtable tr:last-child td { border-bottom: none; }
+.trow { opacity: 0; transition: opacity .4s ease; }
+.trow.in { opacity: 1; }
+.h-dot { display: inline-flex; align-items: center; gap: 5px; font-size: .6rem; font-family: var(--mono); letter-spacing: .04em; }
+.h-dot::before { content: ''; width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+.h-dot.g::before{background:var(--green)} .h-dot.a::before{background:var(--amber)} .h-dot.r::before{background:var(--red); animation:breathe 2s ease-in-out infinite;}
+
+/* Donut */
+.donut-svg { width: 110px; height: 110px; margin: 6px 0 8px; }
+.donut-legend { width: 100%; display: flex; flex-direction: column; gap: 7px; margin-top: 6px; }
+.dl-item { display: flex; align-items: center; justify-content: space-between; font-size: .7rem; }
+.dl-left { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: .68rem; }
+.dl-sq { width: 6px; height: 6px; border-radius: 2px; }
+.dl-val { color: var(--white); font-family: var(--mono); font-size: .68rem; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center; padding: 56px 24px;
+  border-top: 1px solid var(--border);
+}
+.footer-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--white); margin-bottom: 8px; }
+.footer-tag { font-size: .8rem; color: var(--dim); }
+
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════ */
+
+/* ── Global overflow protection ── */
+html, body { max-width: 100vw; overflow-x: hidden; }
+
+/* Tablet */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero { padding: 60px 20px; min-height: auto; }
+  .hero h1 { font-size: clamp(2.4rem, 7vw, 3.5rem); }
+  .hero-sub { font-size: .88rem; }
+  .hero-pills { gap: 6px; }
+  .pill { font-size: .68rem; padding: 5px 12px; }
+  .scroll-cue { display: none; }
+
+  /* Section heads */
+  .sec-head { padding: 60px 20px 40px; }
+  .sec-head h2 { font-size: clamp(1.6rem, 5vw, 2.2rem); }
+
+  /* Type explainer */
+  .type-row { flex-direction: column; gap: 10px; padding: 0 20px 36px; }
+  .type-card { min-width: 0; }
+
+  /* Scenario tabs — horizontal scroll */
+  .scenario-tabs {
+    flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start;
+    padding: 0 20px 24px; gap: 6px; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .scenario-tabs::-webkit-scrollbar { display: none; }
+  .stab { white-space: nowrap; flex-shrink: 0; font-size: .66rem; padding: 6px 11px; }
+
+  /* Demo grid — stack vertically */
+  .demo-outer { padding: 0 12px 60px; }
+  .demo-grid { grid-template-columns: 1fr; gap: 14px; }
+
+  /* Slack — hide sidebar */
+  .slack-layout { grid-template-columns: 1fr; }
+  .slack-sidebar { display: none; }
+  .slack-wrap { min-height: 420px; }
+  .slack-msgs { min-height: 260px; padding: 14px 12px; }
+  .msg-text { font-size: .78rem; word-break: break-word; }
+
+  /* Queue panel — not sticky on mobile */
+  .queue-panel { position: static; }
+  .qp-body { min-height: 300px; }
+
+  /* Dashboard section */
+  .dashboard-section { padding: 0 12px 80px; }
+
+  /* Dashboard nav — horizontal scroll */
+  .dash-nav { padding: 0 14px; gap: 8px; height: 48px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .dash-nav::-webkit-scrollbar { display: none; }
+  .dash-logo { font-size: .8rem; white-space: nowrap; flex-shrink: 0; }
+  .dash-nav-links { flex-shrink: 0; }
+  .dnl { padding: 12px 8px; font-size: .68rem; white-space: nowrap; }
+  .dash-nav-right { flex-shrink: 0; }
+
+  /* Dashboard body */
+  .dash-body { padding: 16px 14px; gap: 14px; }
+  .dash-greeting { font-size: .82rem; }
+  .dash-date { font-size: .55rem; }
+
+  /* KPIs — 3 columns on tablet */
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .kpi { padding: 14px 12px; }
+  .kpi-val { font-size: 1.3rem; }
+  .kpi-label { font-size: .55rem; letter-spacing: .15em; }
+  .kpi-delta { font-size: .55rem; word-break: break-word; }
+
+  /* Mid row — stack */
+  .dash-mid { grid-template-columns: 1fr; }
+
+  /* Bottom row — stack */
+  .dash-bot { grid-template-columns: 1fr; }
+
+  /* Donut card — horizontal layout when stacked */
+  .dash-donut-card { flex-direction: row; gap: 16px; flex-wrap: wrap; }
+  .donut-svg { width: 100px; height: 100px; }
+
+  /* Alert items — stack CTA below */
+  .alert-item { flex-wrap: wrap; }
+}
+
+/* Phone */
+@media (max-width: 480px) {
+  /* Hero — bigger heading on phone */
+  .hero { padding: 48px 16px; }
+  .hero h1 { font-size: clamp(2.4rem, 10vw, 3rem); margin-bottom: 20px; line-height: 1.08; }
+  .hero-sub { font-size: .84rem; margin-bottom: 32px; padding: 0 4px; }
+  .hero-eyebrow { font-size: .62rem; margin-bottom: 20px; }
+  .hero-pills { gap: 5px; padding: 0 4px; }
+  .pill { font-size: .62rem; padding: 5px 10px; }
+
+  /* Section heads — bigger h2 */
+  .sec-head { padding: 48px 16px 32px; }
+  .sec-head h2 { font-size: clamp(1.6rem, 7vw, 2rem); line-height: 1.15; }
+  .sec-head p { font-size: .82rem; padding: 0 4px; }
+  .type-row { padding: 0 16px 28px; }
+  .type-card { padding: 14px 16px; }
+  .type-desc { font-size: .74rem; }
+
+  /* Scenario tabs */
+  .scenario-tabs { padding: 0 16px 20px; }
+  .stab { font-size: .6rem; padding: 5px 9px; }
+
+  /* Demo */
+  .demo-outer { padding: 0 8px 48px; }
+
+  /* Slack — tighter but no overflow */
+  .slack-titlebar { padding: 8px 12px; }
+  .slack-wrap { min-height: 360px; border-radius: 10px; }
+  .slack-msgs { min-height: 220px; padding: 12px 10px; gap: 12px; }
+  .slack-cbar { padding: 8px 10px; }
+  .cbar-name { font-size: .78rem; }
+  .cbar-trigger { font-size: .58rem; padding: 2px 7px; }
+  .msg { gap: 8px; }
+  .msg-av { width: 28px; height: 28px; font-size: .58rem; }
+  .msg-name { font-size: .76rem; }
+  .msg-text { font-size: .74rem; line-height: 1.5; word-break: break-word; overflow-wrap: anywhere; }
+  .msg-bot { font-size: .52rem; }
+  .msg-time { font-size: .6rem; }
+  .msg-confirm { padding: 7px 10px; }
+  .msg-confirm-top { font-size: .74rem; }
+  .msg-confirm-sub { font-size: .68rem; word-break: break-word; }
+  .slack-input-mock { font-size: .72rem; padding: 7px 10px; }
+
+  /* Queue — prevent overflow */
+  .queue-panel { border-radius: 10px; }
+  .qp-head { padding: 12px 14px; }
+  .qp-body { min-height: 240px; padding: 10px; }
+  .qi-top { padding: 8px 10px; }
+  .qi-type { font-size: .56rem; }
+  .qi-badge { font-size: .56rem; }
+  .qi-body { padding: 10px; }
+  .qi-title { font-size: .78rem; word-break: break-word; }
+  .qi-detail { font-size: .7rem; word-break: break-word; }
+  .qi-chips { gap: 4px; }
+  .qi-chip { font-size: .58rem; padding: 2px 6px; }
+  .qi-agent { font-size: .6rem; }
+  /* Queue buttons — stack on very small screens */
+  .qi-actions { flex-wrap: wrap; gap: 6px; }
+  .qi-actions-comm { flex-wrap: wrap; gap: 5px; }
+  .btn-approve { font-size: .74rem; padding: 9px 8px; min-width: 0; }
+  .btn-decline { font-size: .74rem; padding: 8px 10px; }
+  .btn-changes { font-size: .7rem; padding: 8px; }
+  .qi-draft { padding: 8px 10px; }
+  .qi-draft-label { font-size: .5rem; }
+  .qi-draft-text { font-size: .68rem; word-break: break-word; }
+  .qi-preview-link { padding: 7px 10px; }
+  .qi-preview-text { font-size: .64rem; }
+  .qi-feedback { padding: 7px 10px; }
+  .qi-feedback-text { font-size: .68rem; word-break: break-word; }
+
+  /* Dashboard — full width protection */
+  .dashboard-section { padding: 0 6px 60px; }
+  .browser-chrome { border-radius: 10px; overflow: hidden; }
+  .browser-bar { padding: 8px 10px; gap: 6px; }
+  .browser-url { font-size: .58rem; padding: 5px 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mac-dot { width: 10px; height: 10px; }
+
+  /* Dashboard nav — scrollable row */
+  .dash-nav { padding: 0 10px; gap: 6px; height: 44px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .dash-nav::-webkit-scrollbar { display: none; }
+  .dash-logo { font-size: .72rem; gap: 5px; flex-shrink: 0; }
+  .logo-dot { width: 5px; height: 5px; }
+  .dnl { padding: 10px 5px; font-size: .58rem; white-space: nowrap; }
+  .dash-nav-right { gap: 8px; }
+  .dash-live { font-size: .52rem; }
+  .dash-updated { font-size: .52rem; display: none; }
+
+  .dash-body { padding: 12px 10px; gap: 12px; }
+  .dash-greeting { font-size: .78rem; }
+  .dash-date { font-size: .52rem; }
+  .dash-greeting-row { gap: 6px; }
+
+  /* Period selector — tighter */
+  .period-sel { flex-shrink: 0; }
+  .period { padding: 4px 7px; font-size: .5rem; }
+
+  /* KPIs — 2 columns on phone */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi { padding: 12px 10px; }
+  .kpi-val { font-size: 1.1rem; }
+  .kpi-label { font-size: .48rem; letter-spacing: .1em; margin-bottom: 6px; }
+  .kpi-delta { font-size: .5rem; word-break: break-word; line-height: 1.4; }
+
+  /* Chart + Alerts */
+  .dash-chart { padding: 12px 10px; }
+  .dash-alerts { padding: 12px 10px; }
+  .card-head { flex-wrap: wrap; gap: 6px; }
+  .card-title { font-size: .7rem; }
+  .card-sub { font-size: .52rem; }
+  .chart-svg { height: 100px; }
+  .chart-legend { gap: 8px; }
+  .leg-item { font-size: .56rem; }
+  /* Alerts — stack CTA below text */
+  .alert-item { flex-wrap: wrap; gap: 6px; }
+  .alert-title { font-size: .68rem; }
+  .alert-desc { font-size: .54rem; word-break: break-word; }
+  .alert-cta { font-size: .48rem; padding: 2px 7px; }
+
+  /* Table — horizontal scroll wrapper */
+  .dash-table-card { padding: 12px 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .dtable { font-size: .62rem; min-width: 340px; }
+  .dtable th { font-size: .46rem; letter-spacing: .1em; padding-bottom: 6px; padding-right: 8px; }
+  .dtable td { padding: 7px 8px 7px 0; white-space: nowrap; }
+  .h-dot { font-size: .52rem; }
+
+  /* Donut — column layout on phone */
+  .dash-donut-card { padding: 12px 10px; flex-direction: column; align-items: center; }
+  .donut-svg { width: 90px; height: 90px; }
+  .donut-legend { gap: 5px; }
+  .dl-item { font-size: .6rem; }
+  .dl-left { font-size: .58rem; gap: 5px; }
+  .dl-val { font-size: .58rem; }
+
+  /* Footer */
+  .footer { padding: 40px 16px; }
+  .footer-logo { font-size: 1rem; }
+  .footer-tag { font-size: .72rem; padding: 0 8px; }
+}
+
+/* Very small phones (iPhone SE / 320px) */
+@media (max-width: 375px) {
+  .hero h1 { font-size: 2.2rem; }
+  .hero-sub { font-size: .8rem; }
+  .sec-head h2 { font-size: 1.5rem; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-val { font-size: 1rem; }
+  .kpi-label { font-size: .46rem; }
+  .kpi-delta { font-size: .48rem; }
+  .demo-outer { padding: 0 6px 40px; }
+  .dashboard-section { padding: 0 4px 50px; }
+  .dash-body { padding: 10px 8px; }
+  .dtable { min-width: 320px; font-size: .58rem; }
+  .qi-actions-comm { flex-direction: column; }
+  .btn-approve, .btn-changes, .btn-decline { width: 100%; text-align: center; }
+}
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-logo">Integrate<span>AI</span></div>
-  <div class="nav-pills">
-    <a class="nav-pill" href="#phase1">01 Discover</a>
-    <a class="nav-pill" href="#phase2">02 Dashboard</a>
-    <a class="nav-pill" href="#phase3">03 Intelligence</a>
-    <a class="nav-pill" href="#phase4">04 Operations</a>
-  </div>
-</nav>
-
 <!-- ═══ HERO ═══ -->
-<section class="hero full-dark">
-  <div class="hero-bg"><div class="hero-glow"></div></div>
-  <span class="label">IntegrateAI × New Ground Coffee</span>
-  <h1>From Discovery<br>to <em>Intelligence</em></h1>
-  <p class="tagline">A four-phase journey that turns your disconnected business systems into a single intelligence layer — one that learns your business, builds your dashboard, finds your opportunities, and can eventually help run your operations.</p>
-  <div class="journey-map">
-    <div class="jm-phase p1"><div class="jm-signal"></div><div class="jm-num">Phase 01</div><div class="jm-name">Discover</div><div class="jm-arrow">→</div></div>
-    <div class="jm-phase p2"><div class="jm-signal"></div><div class="jm-num">Phase 02</div><div class="jm-name">Dashboard</div><div class="jm-arrow">→</div></div>
-    <div class="jm-phase p3"><div class="jm-signal"></div><div class="jm-num">Phase 03</div><div class="jm-name">Intelligence</div><div class="jm-arrow">→</div></div>
-    <div class="jm-phase p4"><div class="jm-signal"></div><div class="jm-num">Phase 04</div><div class="jm-name">Operations</div></div>
+<section class="hero">
+  <div class="hero-eyebrow">IntegrateAI × New Ground Coffee</div>
+  <h1>Every action.<br>One queue.<br><em>Full control.</em></h1>
+  <p class="hero-sub">Whether Dickon or Joel asks for it in Slack or the system spots it overnight — nothing executes without founder sign-off. Pay invoices. Send campaigns. Update prices. Reorder stock. One place. No logins required.</p>
+  <div class="hero-pills">
+    <span class="pill hi">Approval Queue</span>
+    <span class="pill">Xero</span>
+    <span class="pill">Shopify</span>
+    <span class="pill">Klaviyo</span>
+    <span class="pill">Gmail</span>
+    <span class="pill">Slack</span>
+  </div>
+  <div class="scroll-cue">
+    <span>See it in action</span>
+    <div class="scroll-line"></div>
   </div>
 </section>
 
-<!-- ═══ PHASE 1 — DISCOVERY ═══ -->
-<div class="full-light">
-<section id="phase1" class="reveal">
-  <div class="phase-hero">
-    <div class="phase-number p1-color">01</div>
-    <div>
-      <span class="phase-meta" style="color:var(--green)">Phase One</span>
-      <h2 style="margin-bottom:4px">Discover</h2>
-      <p class="subtitle">Six C-Suite agents and their specialist teams connect to your systems, learn your business, and ask the right questions at the right time.</p>
-    </div>
-  </div>
-  <p style="font-size:.88rem;color:var(--grey);max-width:700px;line-height:1.7;margin-bottom:16px">Before anything is built, before any advice is given, the Discovery Engine does something most consultants don't — it shuts up and listens. Six specialised C-Suite agents and their supporting teams connect to every system in your business with read-only access. They map the full picture before saying a word.</p>
-  <p style="font-size:.88rem;color:var(--grey);max-width:700px;line-height:1.7">Then — once it has enough context — the system asks questions. Not generic onboarding questionnaires. Specific, informed questions that show it already understands your business. Questions that fill in the gaps between what the data shows and what Dickon knows.</p>
-
-  <div class="day-timeline" id="timeline1">
-    <div class="day-row stg"><div class="day-label-col green-line"><span class="day-num">Step 1</span><span class="day-icon">🔌</span></div><div class="day-content"><h4>Connect</h4><p>Read-only API connections established to POS, Shopify, Xero, email, and social accounts. Zero risk to your systems.</p></div></div>
-    <div class="day-row stg"><div class="day-label-col green-line"><span class="day-num">Step 2</span><span class="day-icon">👁️</span></div><div class="day-content"><h4>Observe</h4><p>Agents silently ingest data across all four channels. Sales patterns, customer behaviour, financial flows, inventory levels, supplier timings. Building a complete data model of your business as it actually operates.</p></div></div>
-    <div class="day-row stg"><div class="day-label-col green-line"><span class="day-num">Step 3</span><span class="day-icon">🔍</span></div><div class="day-content"><h4>Analyse</h4><p>Cross-channel pattern recognition. Which retail customers are also online buyers, which wholesale accounts are growing vs stalling, where production misaligns with demand, which content drives real sales vs vanity metrics.</p></div></div>
-    <div class="day-row stg"><div class="day-label-col green-line"><span class="day-num">Step 4</span><span class="day-icon">💬</span></div><div class="day-content"><h4>Ask</h4><p>Now the system asks Dickon questions. It doesn't ask "what's your biggest challenge?" It says "your Ethiopian single-origin margin has dropped 12% over three months — is that a supplier issue or a pricing decision?"</p></div></div>
-    <div class="day-row stg"><div class="day-label-col green-line"><span class="day-num">Step 5</span><span class="day-icon">📋</span></div><div class="day-content"><h4>Report</h4><p>The Discovery Report: complete picture across all four channels, identified bottlenecks, missed revenue opportunities, efficiency gaps, and a recommended deployment plan.</p></div></div>
+<!-- ═══ EXECUTION MODEL ═══ -->
+<section>
+  <div class="sec-head reveal">
+    <span class="eyebrow">The Execution Model</span>
+    <h2>Two types of action.<br>One approval gate.</h2>
+    <p>The system works two ways. It spots opportunities autonomously and brings them to you. Or either founder asks for something directly in Slack. Either way, every action lands in the same queue — fully prepared, explained, and waiting for a single tap.</p>
   </div>
 
-  <div style="margin-top:40px">
-    <h3 style="font-size:1.2rem;margin-bottom:8px">The Kind of Questions It Asks</h3>
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px">Not right away. After it already knows the answers to the obvious ones.</p>
-    <div class="q-grid" id="qGrid">
-      <div class="q-card stg"><span class="q-agent">CFO Agent</span><p>"Your House Blend wholesale margin is 18% — below your other blends at 24-28%. Is that intentional volume pricing or has the cost base shifted?"</p></div>
-      <div class="q-card stg"><span class="q-agent">COO Agent</span><p>"Thursday's roast schedule shows 6 hours of idle time between batches. Is this an equipment constraint or scheduling choice?"</p></div>
-      <div class="q-card stg"><span class="q-agent">CMO Agent</span><p>"Your Instagram behind-the-scenes content gets 3x the engagement of product shots, but you post 4x more product shots. Is that a resource constraint?"</p></div>
-      <div class="q-card stg"><span class="q-agent">CEO Agent</span><p>"12 retail customers buy 2+ bags weekly but aren't on subscriptions. Is there a reason you haven't pushed subscription conversion in-store?"</p></div>
-      <div class="q-card stg"><span class="q-agent">COO Agent</span><p>"Three wholesale accounts haven't reordered in 4+ weeks despite steady previous patterns. Are you aware of any relationship issues?"</p></div>
-      <div class="q-card stg"><span class="q-agent">CFO Agent</span><p>"Your DTC shipping costs are 22% of order value on small orders. Have you considered a minimum order threshold or flat-rate box?"</p></div>
+  <div class="type-row reveal">
+    <div class="type-card proactive">
+      <div class="type-dot"></div>
+      <div>
+        <div class="type-title">Proactive</div>
+        <div class="type-desc">System detected an opportunity, risk, or saving. Prepared the action. Brought it to you unprompted.</div>
+      </div>
+    </div>
+    <div class="type-vs">+</div>
+    <div class="type-card requested">
+      <div class="type-dot"></div>
+      <div>
+        <div class="type-title">Requested</div>
+        <div class="type-desc">Dickon or Joel asked via Slack. System prepared the action. Same approval flow regardless of origin.</div>
+      </div>
     </div>
   </div>
-  <div class="callout callout-light"><h4>The Zero-Destruction Promise</h4><p>Every Discovery connection is read-only. The agents observe — they never interfere. Your systems, data, and operations remain completely untouched. Not a single record is modified, created, or deleted during Discovery.</p></div>
+
+  <div class="scenario-tabs reveal" id="scenarioTabs"></div>
+
+  <div class="demo-outer">
+    <div class="demo-grid">
+      <!-- SLACK -->
+      <div class="slack-wrap">
+        <div class="slack-titlebar">
+          <div class="mac-dots">
+            <div class="mac-dot r"></div>
+            <div class="mac-dot y"></div>
+            <div class="mac-dot g"></div>
+          </div>
+          <div class="slack-title-text">Slack — New Ground Coffee</div>
+        </div>
+        <div class="slack-layout">
+          <div class="slack-sidebar">
+            <div class="sidebar-ws">
+              <div class="sidebar-ws-icon">NG</div>
+              <span class="sidebar-ws-name">New Ground</span>
+            </div>
+            <div class="sidebar-section">Channels</div>
+            <div class="sidebar-item">general</div>
+            <div class="sidebar-item">wholesale</div>
+            <div class="sidebar-item act">new-ground-intel <span class="sidebar-bdg">9+</span></div>
+            <div class="sidebar-item">marketing</div>
+            <div class="sidebar-item">roastery</div>
+            <div class="sidebar-item">finance</div>
+            <div class="sidebar-section">Direct</div>
+            <div class="sidebar-item dm">Dickon Morris</div>
+            <div class="sidebar-item dm">Joel Grates</div>
+            <div class="sidebar-item dm">Paul</div>
+          </div>
+          <div class="slack-main">
+            <div class="slack-cbar">
+              <span class="cbar-hash">#</span>
+              <span class="cbar-name">new-ground-intel</span>
+              <span class="cbar-trigger empty" id="triggerBadge"></span>
+            </div>
+            <div class="slack-msgs" id="slackMsgs"></div>
+            <div class="typing-wrap" id="typingWrap">
+              <div class="typing-av">AI</div>
+              <div class="typing-bubble">
+                <div class="td"></div><div class="td"></div><div class="td"></div>
+              </div>
+            </div>
+            <div class="slack-inputbar">
+              <div class="slack-input-mock">Message #new-ground-intel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUEUE PANEL -->
+      <div class="queue-panel">
+        <div class="qp-head">
+          <span class="qp-title">Approval Queue</span>
+          <span class="qp-count zero" id="qpCount">0</span>
+        </div>
+        <div class="qp-body">
+          <div class="q-empty" id="qEmpty">
+            <div class="q-empty-icon">⏳</div>
+            <div class="q-empty-text">Monitoring all systems…<br>Nothing pending approval yet.</div>
+          </div>
+          <div id="qItems"></div>
+        </div>
+      </div>
+    </div>
+    <div class="adv-bar"><div class="adv-fill" id="advFill"></div></div>
+  </div>
 </section>
-</div>
 
-<div class="full-dark" style="padding:24px 0"><div class="phase-progress" style="max-width:800px;margin:0 auto"><div class="phase-progress-fill pp1" data-fill></div></div></div>
-
-<!-- ═══ PHASE 2 — DASHBOARD ═══ -->
-<div class="full-dark">
-<section id="phase2" class="reveal">
-  <div class="phase-hero">
-    <div class="phase-number p2-color">02</div>
-    <div>
-      <span class="phase-meta" style="color:var(--blue)">Phase Two</span>
-      <h2 style="color:var(--white);margin-bottom:4px">Dashboard</h2>
-      <p class="subtitle">One system. Every channel. Every number. Built from what Discovery found — not a template.</p>
-    </div>
-  </div>
-  <p style="font-size:.88rem;color:var(--muted);max-width:700px;line-height:1.7;margin-bottom:16px">Right now, to understand your business, you need to log into your POS, then Shopify, then Xero, then check email, then scroll through social accounts. Five different systems that don't talk to each other.</p>
-  <p style="font-size:.88rem;color:var(--muted);max-width:700px;line-height:1.7">The dashboard changes that. A single central system that pulls live data from every connected source. Shaped around New Ground Coffee's specific channels and metrics.</p>
-
-  <div class="dash-build" id="dashBuild">
-    <div class="db-card stg"><span class="db-icon">💳</span><h4>Retail Revenue</h4><p>Live POS data. Sales by product, time, day. Foot traffic patterns.</p><span class="db-source">POS System</span></div>
-    <div class="db-card stg"><span class="db-icon">🛒</span><h4>Online & Subscriptions</h4><p>Shopify orders, subscription health, cart abandonment, CLV.</p><span class="db-source">Shopify</span></div>
-    <div class="db-card stg"><span class="db-icon">🤝</span><h4>Wholesale Pipeline</h4><p>Accounts, order frequency, pipeline value, reorder predictions.</p><span class="db-source">Invoicing + CRM</span></div>
-    <div class="db-card stg"><span class="db-icon">🔥</span><h4>Production & Inventory</h4><p>Green bean stock, roast schedules, demand forecasts, waste tracking.</p><span class="db-source">Inventory System</span></div>
-    <div class="db-card stg"><span class="db-icon">💰</span><h4>Financial Health</h4><p>Cash flow, margins by channel, cost tracking, monthly P&L trends.</p><span class="db-source">Xero</span></div>
-    <div class="db-card stg"><span class="db-icon">📱</span><h4>Marketing Performance</h4><p>Engagement, campaign ROI, and which content actually drives sales.</p><span class="db-source">Social + Email</span></div>
+<!-- ═══ DASHBOARD ═══ -->
+<section class="dashboard-section">
+  <div class="sec-head reveal">
+    <span class="eyebrow">The Dashboard</span>
+    <h2>One screen.<br>Every channel. Live.</h2>
+    <p>Ship Street POS, Workshop POS, Shopify, Xero, Klaviyo, and all six wholesale accounts — connected and watched. You see what matters.</p>
   </div>
 
-  <div style="margin-top:40px"><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:8px">Not Another Reporting Tool</h3><p style="font-size:.85rem;color:var(--muted);max-width:700px;line-height:1.7">The dashboard highlights what matters. The CEO agent triages every data point by urgency and impact. Three things surface: the numbers that define today, the alerts that need attention, and the opportunities that would otherwise be missed.</p></div>
-
-  <div class="phase-grid" style="margin-top:24px">
-    <div class="phase-card-dark stg"><span class="pc-icon">☀️</span><h4>Morning WhatsApp Brief</h4><p>Before Dickon opens the dashboard, the CEO agent sends yesterday's summary each morning. Revenue, priorities, alerts, one recommended action. Tap to approve.</p></div>
-    <div class="phase-card-dark stg"><span class="pc-icon">🚨</span><h4>Real-Time Alerts</h4><p>Stock below threshold? Wholesale account gone quiet? A WhatsApp ping with context and a recommended action — not just a notification.</p></div>
-    <div class="phase-card-dark stg"><span class="pc-icon">📊</span><h4>Weekly Founder Report</h4><p>Weekly: trends, comparisons, strategic insights. What's working, what's not, where the opportunities are. Auto-generated.</p></div>
-    <div class="phase-card-dark stg"><span class="pc-icon">❓</span><h4>Ask Anything in Slack</h4><p>"How did wholesale perform last month?" "What's our subscription churn rate?" The system answers from live data — instantly.</p></div>
-  </div>
-</section>
-</div>
-
-<div class="full-white" style="padding:24px 0"><div class="phase-progress" style="max-width:800px;margin:0 auto;background:var(--border)"><div class="phase-progress-fill pp2" data-fill></div></div></div>
-
-<!-- ═══ PHASE 3 — INTELLIGENCE ═══ -->
-<div class="full-white">
-<section id="phase3" class="reveal">
-  <div class="phase-hero">
-    <div class="phase-number p3-color">03</div>
-    <div>
-      <span class="phase-meta" style="color:var(--terra)">Phase Three</span>
-      <h2 style="margin-bottom:4px">Intelligence</h2>
-      <p class="subtitle">The system stops just reporting and starts thinking. Proactively.</p>
-    </div>
-  </div>
-  <p style="font-size:.88rem;color:var(--grey);max-width:700px;line-height:1.7;margin-bottom:16px">Phase 2 shows what's happening. Phase 3 tells you what to do about it. The C-Suite agents run scheduled deep intelligence sessions across every data source — informed by always-on data awareness that tracks your business between sessions. Looking for ways to save money, make more money, and run more efficiently. They don't wait to be asked.</p>
-
-  <div class="phase-grid" id="intelGrid">
-    <div class="phase-card stg" style="border-top:3px solid var(--green)"><span class="pc-icon">💰</span><h4>Save Money</h4><p>Supplier price drift. Roast schedule waste. Overstaffed shifts. The CFO and COO agents constantly look for places where money is leaking.</p><div style="margin-top:12px;padding:10px 14px;background:var(--green-bg);border-radius:6px;font-size:.75rem;color:var(--dark);font-style:italic">"Thursday's roast schedule has 6 hours idle. Consolidating into Wednesday saves £120/week. Approve?"</div></div>
-    <div class="phase-card stg" style="border-top:3px solid var(--blue)"><span class="pc-icon">📈</span><h4>Grow Revenue</h4><p>Cross-sell patterns. Subscription conversion candidates. Wholesale territory gaps. The CMO and CEO agents find revenue you're leaving on the table.</p><div style="margin-top:12px;padding:10px 14px;background:var(--blue-bg);border-radius:6px;font-size:.75rem;color:var(--dark);font-style:italic">"12 retail customers buy 2+ bags weekly but aren't subscribers. Campaign drafted. Est: £2,160/yr."</div></div>
-    <div class="phase-card stg" style="border-top:3px solid var(--amber)"><span class="pc-icon">⚡</span><h4>Get More Efficient</h4><p>Bottleneck detection. Response time optimisation. Reporting elimination. The COO and CTO agents find where hours are wasted.</p><div style="margin-top:12px;padding:10px 14px;background:var(--amber-bg);border-radius:6px;font-size:.75rem;color:var(--dark);font-style:italic">"Wholesale response averages 47 hours. Automation cuts this to under 2 hours."</div></div>
-    <div class="phase-card stg" style="border-top:3px solid var(--purple)"><span class="pc-icon">🔄</span><h4>Keep More Customers</h4><p>Churn prediction. Relationship health monitoring. Win-back triggers. The system spots customers about to leave before they leave.</p><div style="margin-top:12px;padding:10px 14px;background:var(--purple-bg);border-radius:6px;font-size:.75rem;color:var(--dark);font-style:italic">"3 subscribers showing churn signals. Win-back emails with personalised blends queued. Approve?"</div></div>
-  </div>
-
-  <div style="margin-top:48px"><h3 style="font-size:1.2rem;margin-bottom:8px">Ask It Anything. Get an Answer Grounded in Your Data.</h3><p style="font-size:.82rem;color:var(--muted)">The intelligence layer isn't just proactive — it's responsive. Open Slack and ask any business question.</p>
-    <div class="slack-mock" id="slackMock">
-      <div class="slack-header"><span class="slack-hash">#</span><span class="slack-channel">new-ground-intel</span><span class="slack-status"></span></div>
-      <div class="slack-body">
-        <div class="slack-msg" data-delay="300"><div class="slack-avatar human">DK</div><div class="slack-text"><div class="slack-name">Dickon (Founder) <span class="time">9:14 AM</span></div><div class="slack-p">Which wholesale accounts should we be worried about?</div></div></div>
-        <div class="typing" id="typingInd"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
-        <div class="slack-msg" data-delay="2200"><div class="slack-avatar ai">AI</div><div class="slack-text"><div class="slack-name">IntegrateAI <span class="bot-badge">APP</span> <span class="time">9:14 AM</span></div><div class="slack-p">Three accounts to watch right now:
-
-<strong>1. The Crown Inn</strong> — order frequency dropped from weekly to every 18 days. Volume down 35%. Recommend a personal check-in.
-
-<strong>2. Burford Garden Centre</strong> — switched from single-origins to House Blend only. Possible budget pressure. Opportunity to offer volume discount.
-
-<strong>3. Soho Farmhouse</strong> — payment terms stretching from 14 to 28 days. CFO recommends a gentle reminder this week.
-
-All three in your dashboard under Wholesale → At Risk. Want me to draft outreach?</div><div class="slack-reaction">👀 2</div></div></div>
-        <div class="slack-msg" data-delay="3800"><div class="slack-avatar human">DK</div><div class="slack-text"><div class="slack-name">Dickon (Founder) <span class="time">9:15 AM</span></div><div class="slack-p">Draft something for The Crown Inn. Keep it warm — they're just busy.</div></div></div>
-        <div class="slack-msg" data-delay="5200"><div class="slack-avatar ai">AI</div><div class="slack-text"><div class="slack-name">IntegrateAI <span class="bot-badge">APP</span> <span class="time">9:15 AM</span></div><div class="slack-p">Done. Casual check-in referencing their usual Ethiopian order, mentions a new seasonal blend. No pressure. Sent to your approval queue. ✓</div><div class="slack-reaction">✅ 1</div></div></div>
+  <div class="browser-wrap reveal">
+    <div class="browser-chrome">
+      <div class="browser-bar">
+        <div class="mac-dots">
+          <div class="mac-dot r"></div>
+          <div class="mac-dot y"></div>
+          <div class="mac-dot g"></div>
+        </div>
+        <div class="browser-url">
+          <span class="url-lock">🔒</span>
+          intelligence.newgroundcoffee.co.uk
+        </div>
+      </div>
+      <div class="dash">
+        <!-- Nav -->
+        <nav class="dash-nav">
+          <div class="dash-logo"><div class="logo-dot"></div>New Ground Intelligence</div>
+          <div class="dash-nav-links">
+            <span class="dnl act">Overview</span>
+            <span class="dnl">Wholesale</span>
+            <span class="dnl">Ship St · Workshop</span>
+            <span class="dnl">Subscriptions</span>
+            <span class="dnl">Foundation</span>
+          </div>
+          <div class="dash-nav-right">
+            <span class="dash-live"><span class="live-dot"></span>Connected</span>
+            <span class="dash-updated" id="dashUpdated">Just now</span>
+          </div>
+        </nav>
+        <!-- Body -->
+        <div class="dash-body">
+          <div class="dash-greeting-row">
+            <div>
+              <div class="dash-greeting">Good morning, <span>Dickon & Joel.</span> Here's New Ground at a glance.</div>
+              <div class="dash-date">Saturday 28 March 2026 · Week 13 · MTD</div>
+            </div>
+            <div class="period-sel">
+              <span class="period act">MTD</span>
+              <span class="period">7D</span>
+              <span class="period">30D</span>
+            </div>
+          </div>
+          <!-- KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi"><div class="kpi-label">Revenue MTD</div><div class="kpi-val" data-target="24380" data-prefix="£" data-fmt="comma">£0</div><div class="kpi-delta up">↑ 12% vs last month</div></div>
+            <div class="kpi"><div class="kpi-label">Wholesale MRR</div><div class="kpi-val" data-target="8940" data-prefix="£" data-fmt="comma">£0</div><div class="kpi-delta up">↑ 5% · 6 accounts</div></div>
+            <div class="kpi"><div class="kpi-label">Subscription Rev</div><div class="kpi-val" data-target="2620" data-prefix="£" data-fmt="comma">£0</div><div class="kpi-delta up">↑ 18% vs last month</div></div>
+            <div class="kpi amber-flag"><div class="kpi-label">Gross Margin</div><div class="kpi-val" data-target="34.2" data-suffix="%" data-fmt="dec">0%</div><div class="kpi-delta wa">↓ 2.1pp — Big House drag</div></div>
+            <div class="kpi"><div class="kpi-label">Foundation Impact</div><div class="kpi-val" data-target="14" data-fmt="int">0</div><div class="kpi-delta up">Academy graduates placed YTD</div></div>
+            <div class="kpi"><div class="kpi-label">Active Subscribers</div><div class="kpi-val" data-target="186" data-fmt="int">0</div><div class="kpi-delta up">↑ 14 this month</div></div>
+          </div>
+          <!-- Chart + Alerts -->
+          <div class="dash-mid">
+            <div class="dash-chart">
+              <div class="card-head">
+                <div><div class="card-title">Revenue</div><div class="card-sub">30 days · all channels</div></div>
+                <div class="chart-legend">
+                  <div class="leg-item"><div class="leg-dot" style="background:var(--terra)"></div>Daily</div>
+                  <div class="leg-item"><div class="leg-dot" style="background:var(--muted)"></div>7d avg</div>
+                </div>
+              </div>
+              <svg id="revenueChart" class="chart-svg" viewBox="0 0 520 140" preserveAspectRatio="none"></svg>
+            </div>
+            <div class="dash-alerts">
+              <div class="card-head">
+                <div><div class="card-title">Insights</div><div class="card-sub">This week</div></div>
+              </div>
+              <div class="alert-list" id="alertList"></div>
+            </div>
+          </div>
+          <!-- Table + Donut -->
+          <div class="dash-bot">
+            <div class="dash-table-card">
+              <div class="card-head">
+                <div><div class="card-title">Wholesale</div><div class="card-sub">6 accounts · £8,940 MRR</div></div>
+              </div>
+              <table class="dtable">
+                <thead><tr><th>Account</th><th>Monthly Value</th><th>Last Order</th><th>Status</th></tr></thead>
+                <tbody id="wholesaleBody"></tbody>
+              </table>
+            </div>
+            <div class="dash-donut-card">
+              <div class="card-head" style="width:100%"><div class="card-title">By channel</div></div>
+              <svg id="donutChart" viewBox="0 0 140 140" class="donut-svg"></svg>
+              <div class="donut-legend" id="donutLegend"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
-</div>
 
-<div class="full-dark" style="padding:24px 0"><div class="phase-progress" style="max-width:800px;margin:0 auto"><div class="phase-progress-fill pp3" data-fill></div></div></div>
-
-<!-- ═══ PHASE 4 — OPERATIONS ═══ -->
-<div class="full-dark">
-<section id="phase4" class="reveal">
-  <div class="phase-hero">
-    <div class="phase-number p4-color">04</div>
-    <div>
-      <span class="phase-meta" style="color:var(--purple)">Phase Four</span>
-      <h2 style="color:var(--white);margin-bottom:4px">Operations</h2>
-      <p class="subtitle">The intelligence layer stops advising and starts doing — pay invoices, send emails, update products, reorder stock. All via the approval queue.</p>
-    </div>
-  </div>
-  <p style="font-size:.88rem;color:var(--muted);max-width:700px;line-height:1.7;margin-bottom:16px">Phase 3 spots the opportunities. Phase 4 acts on them — without Dickon having to log into a single piece of software. The system connects directly to Xero, Shopify, Klaviyo, and your other tools with write access. It prepares every action, puts it in the approval queue, and executes the moment it's approved.</p>
-  <p style="font-size:.88rem;color:var(--muted);max-width:700px;line-height:1.7">The breakthrough isn't the intelligence. It's the execution. Every proactive recommendation and every requested task routes through a single approval gate — one tap and it's done. In the right system. No logins. No copy-paste. No follow-up.</p>
-
-  <div class="ops-ladder" id="opsLadder">
-    <div class="ops-rung stg"><div class="ops-phase"><span class="ops-when">Stage 1</span><span class="ops-mode">Suggest</span></div><div class="ops-detail"><h4>Proactive Recommendations</h4><p>The system spots a cost saving, a revenue opportunity, or a churn risk — and proposes a specific action with full context. Nothing happens until you approve.</p></div></div>
-    <div class="ops-rung stg"><div class="ops-phase"><span class="ops-when">Stage 2</span><span class="ops-mode">Execute</span></div><div class="ops-detail"><h4>Direct Action via the Approval Queue</h4><p>Pay a supplier invoice in Xero. Send a re-engagement campaign in Klaviyo. Update a product price in Shopify. Raise a purchase order. The system prepares it — one tap executes it. No logins required.</p></div></div>
-    <div class="ops-rung stg"><div class="ops-phase"><span class="ops-when">Stage 3</span><span class="ops-mode">Request</span></div><div class="ops-detail"><h4>Ask It to Do Things in Slack</h4><p>"Pay the Brazil invoice." "Send our three at-risk subscribers a win-back offer." "Update the House Blend price to £14.50." The system prepares the action, routes to the queue, executes on approval. No dashboards. No SaaS tabs.</p></div></div>
-    <div class="ops-rung stg"><div class="ops-phase"><span class="ops-when">Ongoing</span><span class="ops-mode">Evolving</span></div><div class="ops-detail"><h4>Smarter Over Time</h4><p>Every approved and rejected action teaches the system what matters and what doesn't. Recommendations get sharper. Execution gets faster. The intelligence compounds.</p></div></div>
-  </div>
-
-  <div style="margin-top:40px;padding:28px 32px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-left:4px solid var(--purple);border-radius:8px">
-    <h4 style="color:var(--white);margin-bottom:12px;font-size:1rem">The Approval Queue — One Gate for Everything</h4>
-    <p style="font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:16px">Every action — whether the system spotted it proactively or Dickon requested it directly — passes through the approval queue before execution. This is non-negotiable by design.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
-      <div style="padding:12px 16px;background:rgba(255,255,255,0.06);border-radius:6px;font-size:.78rem;color:var(--muted)"><span style="display:block;font-weight:600;color:var(--white);margin-bottom:4px">Pay invoices</span>Xero — queued, reviewed, executed</div>
-      <div style="padding:12px 16px;background:rgba(255,255,255,0.06);border-radius:6px;font-size:.78rem;color:var(--muted)"><span style="display:block;font-weight:600;color:var(--white);margin-bottom:4px">Send emails & campaigns</span>Klaviyo — drafted, queued, sent</div>
-      <div style="padding:12px 16px;background:rgba(255,255,255,0.06);border-radius:6px;font-size:.78rem;color:var(--muted)"><span style="display:block;font-weight:600;color:var(--white);margin-bottom:4px">Update product pricing</span>Shopify — change prepared, approved, live</div>
-      <div style="padding:12px 16px;background:rgba(255,255,255,0.06);border-radius:6px;font-size:.78rem;color:var(--muted)"><span style="display:block;font-weight:600;color:var(--white);margin-bottom:4px">Reorder stock</span>Supplier — PO raised, queued for sign-off</div>
-    </div>
-  </div>
-
-  <div class="callout callout-dark" style="margin-top:32px"><h4>You Never Log Into Their Software Again</h4><p>That's the real promise of Phase 4. Xero, Shopify, Klaviyo, your suppliers — the system operates them on your behalf. You stay in Slack. You stay in control. You just stop wasting time in dashboards built for accountants and developers.</p></div>
-</section>
-</div>
-
-<!-- ═══ THE PROMISE ═══ -->
-<div class="full-light">
-<section class="reveal" id="promiseSection">
-  <span class="label">What You Get</span>
-  <h2>The Intelligence Layer<br>for New Ground Coffee</h2>
-  <p class="subtitle">One system. Every channel. Every opportunity visible. Every decision informed.</p>
-  <div class="promise-grid">
-    <div class="promise-card stg" style="background:var(--white)"><span class="promise-num">1</span><span class="promise-label">Central dashboard integrating every part of the business</span></div>
-    <div class="promise-card stg" style="background:var(--white)"><span class="promise-num">24/7</span><span class="promise-label">Proactive intelligence scanning for opportunities</span></div>
-    <div class="promise-card stg" style="background:var(--white)"><span class="promise-num">Slack</span><span class="promise-label">Ask questions, request actions — all from one place</span></div>
-    <div class="promise-card stg" style="background:var(--white)"><span class="promise-num">Daily</span><span class="promise-label">WhatsApp brief before your first coffee</span></div>
-  </div>
-  <div class="value-grid" id="valueCards">
-    <div class="value-card"><div class="value-word" style="color:var(--green)">Save</div><p style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.5">Find waste, cut costs, optimise scheduling. The system pays for itself.</p></div>
-    <div class="value-card"><div class="value-word" style="color:var(--blue)">Grow</div><p style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.5">New customers, bigger orders, smarter pricing. Revenue you're missing.</p></div>
-    <div class="value-card"><div class="value-word" style="color:var(--amber)">Free</div><p style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.5">60+ hours per week back. Focus on what matters.</p></div>
-  </div>
-</section>
-</div>
-
-<!-- ═══ SYSTEM FLOW — ANIMATED PIPELINE ═══ -->
-<div class="full-dark">
-<div class="flow reveal">
-  <div class="flow-header">
-    <h2>The IntegrateAI Pipeline</h2>
-    <p>How every data point flows through the system — from your business tools to actionable intelligence and back again.</p>
-  </div>
-
-  <!-- TIER 1: Business Systems -->
-  <div class="flow-tier flow-sources">
-    <div class="flow-tier-label" style="color:var(--green)">Business Systems</div>
-    <div class="flow-node"><span class="flow-node-icon">💳</span><span class="flow-node-name">POS</span></div>
-    <div class="flow-node"><span class="flow-node-icon">🛒</span><span class="flow-node-name">Shopify</span></div>
-    <div class="flow-node"><span class="flow-node-icon">💰</span><span class="flow-node-name">Xero</span></div>
-    <div class="flow-node"><span class="flow-node-icon">📧</span><span class="flow-node-name">Email</span></div>
-    <div class="flow-node"><span class="flow-node-icon">📱</span><span class="flow-node-name">Social</span></div>
-  </div>
-
-  <!-- Connector: Sources → Agents -->
-  <div class="flow-connector flow-conn-green">
-    <div class="flow-connector-line"></div>
-    <div class="flow-connector-arrows">▼ ▼ ▼</div>
-  </div>
-
-  <!-- TIER 2: Discovery Agents -->
-  <div class="flow-tier flow-agents">
-    <div class="flow-tier-label" style="color:var(--terra)">Discovery Agents</div>
-    <div class="flow-node"><span class="flow-node-icon">🔌</span><span class="flow-node-name">Connect</span></div>
-    <div class="flow-node"><span class="flow-node-icon">👁️</span><span class="flow-node-name">Observe</span></div>
-    <div class="flow-node"><span class="flow-node-icon">🔍</span><span class="flow-node-name">Analyse</span></div>
-  </div>
-
-  <!-- Connector: Agents → Hub -->
-  <div class="flow-connector flow-conn-terra">
-    <div class="flow-connector-line"></div>
-    <div class="flow-connector-arrows">▼ ▼ ▼</div>
-  </div>
-
-  <!-- TIER 3: C-Suite Intelligence Hub (central) -->
-  <div class="flow-hub-wrap">
-    <div class="flow-hub">
-      <div class="flow-tier-label">C-Suite Intelligence Hub</div>
-      <div class="flow-node"><span class="flow-node-icon">👔</span><span class="flow-node-name">CEO</span></div>
-      <div class="flow-node"><span class="flow-node-icon">💵</span><span class="flow-node-name">CFO</span></div>
-      <div class="flow-node"><span class="flow-node-icon">⚙️</span><span class="flow-node-name">COO</span></div>
-      <div class="flow-node"><span class="flow-node-icon">📣</span><span class="flow-node-name">CMO</span></div>
-      <div class="flow-node"><span class="flow-node-icon">🔧</span><span class="flow-node-name">CTO</span></div>
-      <div class="flow-node"><span class="flow-node-icon">🤝</span><span class="flow-node-name">CRO</span></div>
-    </div>
-  </div>
-
-  <!-- Connector: Hub → Dashboard -->
-  <div class="flow-connector flow-conn-blue">
-    <div class="flow-connector-line"></div>
-    <div class="flow-connector-arrows">▼ ▼ ▼</div>
-  </div>
-
-  <!-- TIER 4: Dashboard -->
-  <div class="flow-tier" style="padding:0">
-    <div class="flow-dash">
-      <div class="flow-dash-header">
-        <div class="flow-dash-title">Live Dashboard</div>
-        <div class="flow-dash-live">Live</div>
-      </div>
-      <div class="flow-dash-grid">
-        <div class="flow-dash-cell">
-          <span class="flow-dash-metric">Retail Revenue</span>
-          <span class="flow-dash-val">£2,847</span>
-          <div class="flow-dash-bar" style="width:78%;background:var(--green)"></div>
-        </div>
-        <div class="flow-dash-cell">
-          <span class="flow-dash-metric">Online Orders</span>
-          <span class="flow-dash-val">34</span>
-          <div class="flow-dash-bar" style="width:62%;background:var(--blue)"></div>
-        </div>
-        <div class="flow-dash-cell">
-          <span class="flow-dash-metric">Wholesale Pipeline</span>
-          <span class="flow-dash-val">£12.4k</span>
-          <div class="flow-dash-bar" style="width:88%;background:var(--amber)"></div>
-        </div>
-        <div class="flow-dash-cell">
-          <span class="flow-dash-metric">Cash Position</span>
-          <span class="flow-dash-val">Healthy</span>
-          <div class="flow-dash-bar" style="width:92%;background:var(--terra)"></div>
-        </div>
-      </div>
-      <div class="flow-dash-footer"><span>All channels · Updated live</span></div>
-    </div>
-  </div>
-
-  <!-- Connector: Dashboard → Intelligence -->
-  <div class="flow-connector flow-conn-terra">
-    <div class="flow-connector-line"></div>
-    <div class="flow-connector-arrows">▼ ▼ ▼</div>
-  </div>
-
-  <!-- TIER 5: Intelligence Scanning -->
-  <div class="flow-intel">
-    <div class="flow-tier-label" style="color:var(--terra)">Intelligence Scanning</div>
-    <div class="flow-tier" style="padding:8px 0 0">
-      <div class="flow-node" style="border-color:rgba(74,124,89,.15);background:rgba(74,124,89,.04);animation:flowPulse 4.5s ease-in-out infinite"><span class="flow-node-icon">💰</span><span class="flow-node-name">Save</span></div>
-      <div class="flow-node" style="border-color:rgba(74,111,165,.15);background:rgba(74,111,165,.04);animation:flowPulse 4.5s ease-in-out infinite .6s"><span class="flow-node-icon">📈</span><span class="flow-node-name">Grow</span></div>
-      <div class="flow-node" style="border-color:rgba(196,148,58,.15);background:rgba(196,148,58,.04);animation:flowPulse 4.5s ease-in-out infinite 1.2s"><span class="flow-node-icon">⚡</span><span class="flow-node-name">Efficiency</span></div>
-      <div class="flow-node" style="border-color:rgba(123,97,165,.15);background:rgba(123,97,165,.04);animation:flowPulse 4.5s ease-in-out infinite 1.8s"><span class="flow-node-icon">🔄</span><span class="flow-node-name">Retain</span></div>
-    </div>
-  </div>
-
-  <!-- Connector: Intelligence → Outputs -->
-  <div class="flow-connector flow-conn-purple">
-    <div class="flow-connector-line"></div>
-    <div class="flow-connector-arrows">▼ ▼ ▼</div>
-  </div>
-
-  <!-- TIER 6: Slack + Operations Output -->
-  <div class="flow-output">
-    <div class="flow-output-card" style="border-color:rgba(74,124,89,.15)"><h4>Slack Alerts</h4><p>Real-time intelligence delivered to #new-ground-intel</p></div>
-    <div class="flow-output-card" style="border-color:rgba(74,111,165,.15)"><h4>WhatsApp Brief</h4><p>Morning summary before Dickon's first coffee</p></div>
-    <div class="flow-output-card" style="border-color:rgba(217,119,87,.15)"><h4>Action Queue</h4><p>One-tap approve on recommended actions</p></div>
-    <div class="flow-output-card" style="border-color:rgba(123,97,165,.15)"><h4>Weekly Report</h4><p>Trends, wins, and strategic recommendations</p></div>
-  </div>
-
-
-</div>
-</div>
-
-<!-- ═══ FOOTER ═══ -->
-<div class="full-dark">
-<section class="footer-section">
-  <span class="label">Ready?</span>
-  <h2>The Journey Starts<br>with Discovery</h2>
-  <p class="subtitle" style="margin-bottom:32px">Read-only. Zero risk. Total understanding.<br>We listen first. Then we build.</p>
-  <div class="footer-line">
-    <p><strong style="color:var(--white)">IntegrateAI Advisors</strong> · Milton under Wychwood, Oxfordshire</p>
-    <p style="margin-top:4px"><a href="https://integrate-ai.uk">integrate-ai.uk</a> · Chad Pickard & Paul Robinson</p>
-    <p style="margin-top:12px;font-size:.55rem;color:rgba(255,255,255,.25)">Confidential. Prepared for New Ground Coffee. March 2026.</p>
-  </div>
-</section>
-</div>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">IntegrateAI</div>
+  <div class="footer-tag">Intelligence that executes. Control that never leaves.</div>
+</footer>
 
 <script>
-// ═══ SCROLL REVEAL SYSTEM ═══
-// Add .js class to <html> — enables the hidden state in CSS
-// If this doesn't run, everything stays visible (safe fallback)
-document.documentElement.classList.add('js');
+/* ══════════════════════════════════════════
+   SCENARIO DATA
+══════════════════════════════════════════ */
+const SCENARIOS = [
+  {
+    type: 'requested',
+    label: 'Pay Invoice',
+    steps: [
+      { at: 900,  act: 'msg',    from: 'human', text: 'The East Timor Rotutu arrived this morning — can you pay the Timor-Leste invoice?' },
+      { at: 2400, act: 'typing' },
+      { at: 5200, act: 'msg',    from: 'ai',    text: 'On it. Found the invoice in Xero — <strong>Rotutu Cooperative, Timor-Leste</strong>, Invoice #RTU-0342, due <span class="hl">5 Apr 2026</span>.\n\nAll details verified against the last shipment. Queuing for your approval now.' },
+      { at: 7000, act: 'queue',  data: { type:'PAY', cls:'pay', trigger:'requested', title:'Pay Supplier Invoice', detail:'Rotutu Cooperative · Invoice #RTU-2026-0342', chips:['Xero','£2,340.00','Due 5 Apr 2026'], agent:'CFO Agent', okText:'Approve Payment', doneText:'Payment executing in Xero', doneSub:'Remittance sent to Rotutu Cooperative' } }
+    ], duration: 17000
+  },
+  {
+    type: 'proactive',
+    label: 'Roast Schedule',
+    steps: [
+      { at: 900,  act: 'msg', from: 'ai', text: '📋 <strong>COO spotted an efficiency opportunity at the Workshop.</strong>\n\nThursday\'s Loring roast schedule has <span class="hl">6 hours idle time</span> between the Big House and Mug Shot batches — that\'s £120/week in fixed overhead against the Loring sitting cold.' },
+      { at: 4200, act: 'msg', from: 'ai', text: 'Drafted a revised schedule consolidating both into one extended Wednesday session at OX3. Same roast profiles, same quality — the Loring handles the throughput easily with 80% fuel savings already. Net saving: <strong>£6,240/year</strong>.' },
+      { at: 6500, act: 'queue', data: { type:'CHANGE', cls:'change', trigger:'proactive', title:'Revise Loring Roast Schedule', detail:'Consolidate Thursday idle → extended Wednesday at Workshop', chips:['Production','Loring S35','Save £120/wk'], agent:'COO Agent', okText:'Approve Schedule Change', doneText:'Roast schedule updated', doneSub:'Workshop team notified — Wednesday extended batch confirmed' } }
+    ], duration: 17000
+  },
+  {
+    type: 'proactive',
+    label: 'At-Risk · Revision',
+    steps: [
+      { at: 900,  act: 'msg',    from: 'ai',    text: '⚠️ <strong>CEO flagged 3 wholesale accounts.</strong>\n\n• <strong>Greenhood Coffee</strong> — 18 days silent (usual cycle: 7 days)\n• <strong>The Crown Inn</strong> — Volume down 40%, dropped single origins\n• <strong>Jamie Oliver Group</strong> — Payments stretching 14 → 26 days' },
+      { at: 4500, act: 'msg',    from: 'human', text: 'Draft something for Greenhood — they\'re probably just short-staffed, keep it warm.' },
+      { at: 6000, act: 'typing' },
+      { at: 8500, act: 'msg',    from: 'ai',    text: 'Done. Email drafted from your address — casual check-in referencing their usual Big House order. Full preview is in the approval queue for you to review before it sends.' },
+      { at: 10000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Outreach Email', detail:'Personal check-in — Greenhood Coffee', chips:['Gmail','From: Dickon','Greenhood'], agent:'CEO Agent', okText:'Approve & Send', draft:'Hi James,\n\nHope things are good your end. Noticed we haven\'t heard from you in a while — just wanted to check in.\n\nWe\'ve got a <strong>new East Timor Rotutu</strong> that\'s been going down really well if you fancy trying something different alongside the usual Big House.\n\nLet me know if you need anything.\n\nBest,\nDickon', doneText:'Email sent from Dickon\'s address', doneSub:'Response tracking enabled' } },
+      { at: 14500, act: 'revise', feedback: 'Too formal — make it sound more like me. And mention we can drop samples round to the shop.' },
+      { at: 16000, act: 'typing' },
+      { at: 19000, act: 'msg',   from: 'ai', text: 'Redrafted — warmer tone, added the sample drop-off offer. Updated preview is in the queue.' },
+      { at: 20000, act: 'redraft', newDraft:'Hey James,\n\nBeen a minute! Hope you\'re not too run off your feet over there.\n\nJust a heads up — we\'ve got a <strong>new East Timor Rotutu</strong> in that\'s been flying out the door. Happy to <strong>drop some samples round to the shop</strong> if you want to try it alongside the Big House.\n\nGive us a shout.\n\nDickon' },
+      { at: 23000, act: 'auto_approve' }
+    ], duration: 28000
+  },
+  {
+    type: 'requested',
+    label: 'Win-Back Campaign',
+    steps: [
+      { at: 900,  act: 'msg',    from: 'joel', text: 'Those churning subscribers — can you send them something before we lose them?' },
+      { at: 2300, act: 'typing' },
+      { at: 5200, act: 'msg',    from: 'ai',    text: '3 subscribers showing churn signals. Personalised emails drafted for each:\n\n• <strong>Emma T.</strong> — Single Origins fan, references her last Rotutu order\n• <strong>Marcus R.</strong> — Mug Shot subscriber, free bag of Fun House offer\n• <strong>The Cornstore</strong> — B2B account, Big House volume discount angle\n\n<span class="hl">£380/mo</span> at risk if we lose all three. Emails ready in Klaviyo.' },
+      { at: 7500, act: 'queue', data: { type:'SEND', cls:'send', trigger:'requested', title:'Send Win-Back Campaign', detail:'3 personalised emails — churning subscribers', chips:['Klaviyo','3 emails','£380/mo at risk'], agent:'CMO Agent', okText:'Approve & Send', draftLabel:'Campaign Drafts', draft:'<strong>Emma T.</strong> — "We\'ve missed you! Your favourite Rotutu single origin is back in stock…"\n\n<strong>Marcus R.</strong> — "Still loving espresso? Here\'s a free bag of Mug Shot on us…"\n\n<strong>The Cornstore</strong> — "Your volume qualifies for our wholesale rate — let\'s chat…"', preview:{ icon:'klaviyo', abbr:'K', text:'View full campaign in Klaviyo (draft)' }, doneText:'3 emails sent via Klaviyo', doneSub:'Open tracking active — results in 48hrs' } }
+    ], duration: 17000
+  },
+  {
+    type: 'proactive',
+    label: 'Margin Alert',
+    steps: [
+      { at: 900,  act: 'msg', from: 'ai', text: '📊 <strong>CFO flagged a margin erosion issue.</strong>\n\nBig House Blend wholesale margin has dropped from <strong>24% → 14%</strong> over 3 months. Green bean costs rose in January but the wholesale price to Selfridges, Jamie Oliver, and Luminary was never adjusted.' },
+      { at: 4500, act: 'msg', from: 'ai', text: 'Suggested price adjustment: <span class="hl">£18.50 → £20.00/kg</span>.\n\nAt current wholesale volume across all 6 accounts this recovers <strong>+£840/month</strong> and brings margin back to 22% — still competitive with comparable B Corp roasters.' },
+      { at: 7000, act: 'queue', data: { type:'UPDATE', cls:'update', trigger:'proactive', title:'Update Wholesale Pricing', detail:'Big House Blend: £18.50 → £20.00/kg across 6 wholesale accounts', chips:['Xero','Shopify','+£840/mo','Margin 14%→22%'], agent:'CFO Agent', okText:'Approve Price Update', doneText:'Pricing updated in Shopify + Xero', doneSub:'Selfridges, Jamie Oliver + 4 others notified' } }
+    ], duration: 17000
+  },
+  {
+    type: 'requested',
+    label: 'Reorder Stock',
+    steps: [
+      { at: 900,  act: 'msg',    from: 'joel', text: 'We\'re getting low on the Colombia Villamaria — can you raise a PO?' },
+      { at: 2200, act: 'typing' },
+      { at: 4800, act: 'msg',    from: 'ai',    text: 'Current Villamaria stock: <strong>14kg</strong> — approximately 5 roasting days on the Loring at current production rate.\n\nUsual order: 60kg from <strong>Finca Villamaria, Colombia</strong>. Last agreed price: £21.40/kg. PO drafted for <span class="hl">£1,284</span>, standard lead time 8 days.' },
+      { at: 6800, act: 'queue', data: { type:'ORDER', cls:'order', trigger:'requested', title:'Raise Purchase Order', detail:'Finca Villamaria — 60kg Colombia Decaf Washed', chips:['Purchase Order','£1,284.00','8 day lead time'], agent:'COO Agent', okText:'Raise PO', doneText:'PO sent to Finca Villamaria', doneSub:'Delivery tracking added — Workshop roast schedule updated' } }
+    ], duration: 17000
+  },
+  {
+    type: 'proactive',
+    label: 'Subscription Growth',
+    steps: [
+      { at: 900,  act: 'msg', from: 'ai', text: '📈 <strong>CMO found a subscription opportunity.</strong>\n\n12 Ship Street regulars buy <strong>2+ bags per week</strong> consistently but aren\'t on a subscription. At average sub value of £22/mo, converting 60% would add <span class="hl">~£158/mo</span> in recurring revenue.' },
+      { at: 4500, act: 'msg', from: 'ai', text: 'Campaign drafted — personalised to each customer\'s usual blend (Big House, Mug Shot, Luminary) with a 10% first-month discount. Scheduled for Saturday morning to maximise Ship Street footfall crossover.' },
+      { at: 7000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'proactive', title:'Launch Subscription Campaign', detail:'12 Ship Street regulars — personalised blend-specific outreach', chips:['Klaviyo','12 emails','Est. +£158/mo'], agent:'CMO Agent', okText:'Approve & Send', preview:{ icon:'klaviyo', abbr:'K', text:'Preview campaign in Klaviyo (draft)' }, doneText:'12 personalised emails sent', doneSub:'Conversion tracking live — report in 7 days' } }
+    ], duration: 17000
+  },
+  {
+    type: 'requested',
+    label: 'New Product',
+    steps: [
+      { at: 900,  act: 'msg',    from: 'joel', text: 'Add the new Kenya Kiambu to Shopify — £13.00, 250g bags. It\'s a washed process.' },
+      { at: 2200, act: 'typing' },
+      { at: 5000, act: 'msg',    from: 'ai',    text: 'Product page drafted:\n\n• <strong>Title:</strong> Kenya Kiambu Washed — Spring 2026\n• <strong>Price:</strong> £13.00 / 250g\n• <strong>Tasting notes:</strong> From your roast profile (blackcurrant, brown sugar, citrus)\n• <strong>Tags:</strong> single-origin, seasonal, light-roast, Kenya\n\nImages matched from your existing single-origin library. Subscription option auto-enabled. Ready to publish.' },
+      { at: 7000, act: 'queue', data: { type:'CREATE', cls:'create', trigger:'requested', title:'Publish Product to Shopify', detail:'Kenya Kiambu Washed — Spring 2026 / £13.00 / 250g', chips:['Shopify','£13.00/250g','Kenya','Seasonal'], agent:'CMO Agent', okText:'Publish Live', preview:{ icon:'shopify', abbr:'S', text:'Preview product page in Shopify (draft)' }, doneText:'Product live on Shopify', doneSub:'Added to subscription picker + announcement email drafted' } }
+    ], duration: 17000
+  },
+  {
+    type: 'proactive',
+    label: 'Payment Overdue',
+    steps: [
+      { at: 900,  act: 'msg', from: 'ai', text: '💸 <strong>CFO flagged overdue payments.</strong>\n\n<strong>The Crown Inn</strong> has two consecutive invoices outstanding:\n• Invoice #CI-2026-0108 — £440 (15 days overdue)\n• Invoice #CI-2026-0091 — £400 (28 days overdue)\n\nTotal outstanding: <span class="hl">£840</span>. Payment terms are 14 days.' },
+      { at: 4800, act: 'msg', from: 'ai', text: 'Drafted a gentle but clear reminder from Dickon — acknowledges the relationship, references both invoices. Full email preview is in the queue for you to check before it sends.' },
+      { at: 7000, act: 'queue', data: { type:'SEND', cls:'send', trigger:'proactive', title:'Send Payment Reminder', detail:'The Crown Inn — £840 outstanding (2 invoices)', chips:['Gmail','£840','2 invoices overdue'], agent:'CFO Agent', okText:'Approve & Send', draft:'Hi there,\n\nJust a quick note regarding two invoices that are a little overdue:\n\n• <strong>#CI-2026-0108</strong> — £440 (due 13 Mar)\n• <strong>#CI-2026-0091</strong> — £400 (due 28 Feb)\n\nTotally understand things get busy — just want to flag these so they don\'t slip through. You\'re a valued account and we appreciate the partnership.\n\nHappy to discuss if anything needs adjusting.\n\nBest,\nDickon', doneText:'Reminder sent from Dickon\'s address', doneSub:'Flagged in Xero — follow-up in 5 days if no response' } }
+    ], duration: 17000
+  }
+];
 
-// Reveal the hero immediately with a slight delay
-var hero = document.querySelector('.hero');
-if (hero) setTimeout(function() { hero.classList.add('visible'); }, 100);
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let current = 0;
+let timers  = [];
+let dashInit = false;
 
-// Reveal sections as they scroll into view
-document.querySelectorAll('.reveal').forEach(function(el) {
-  new IntersectionObserver(function(entries, obs) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        obs.unobserve(e.target); // only animate once
+/* ══════════════════════════════════════════
+   DOM REFS
+══════════════════════════════════════════ */
+const tabsEl      = document.getElementById('scenarioTabs');
+const msgsEl      = document.getElementById('slackMsgs');
+const typingEl    = document.getElementById('typingWrap');
+const triggerEl   = document.getElementById('triggerBadge');
+const qCountEl    = document.getElementById('qpCount');
+const qEmptyEl    = document.getElementById('qEmpty');
+const qItemsEl    = document.getElementById('qItems');
+const advFillEl   = document.getElementById('advFill');
+
+/* ══════════════════════════════════════════
+   BUILD TABS
+══════════════════════════════════════════ */
+SCENARIOS.forEach((s, i) => {
+  const t = document.createElement('button');
+  t.className = `stab ${s.type}`;
+  t.innerHTML = `<span class="stab-dot"></span>${s.label}`;
+  t.onclick = () => startScenario(i);
+  tabsEl.appendChild(t);
+});
+
+/* ══════════════════════════════════════════
+   CLEAR
+══════════════════════════════════════════ */
+function clearAll() {
+  timers.forEach(clearTimeout);
+  timers = [];
+}
+
+function resetSlack() {
+  msgsEl.innerHTML = '';
+  typingEl.classList.remove('show');
+}
+
+function resetQueue() {
+  qItemsEl.innerHTML = '';
+  qEmptyEl.style.display = 'flex';
+  qCountEl.textContent = '0';
+  qCountEl.classList.add('zero');
+}
+
+function resetProgress() {
+  advFillEl.style.transition = 'none';
+  advFillEl.style.width = '0%';
+  advFillEl.offsetHeight;
+}
+
+/* ══════════════════════════════════════════
+   SHOW MESSAGE
+══════════════════════════════════════════ */
+function showMsg(from, html) {
+  typingEl.classList.remove('show');
+  const isAI = from === 'ai';
+  const isJoel = from === 'joel';
+  const avText = isAI ? 'AI' : (isJoel ? 'JG' : 'DM');
+  const avClass = isAI ? 'ai' : (isJoel ? 'joel' : 'human');
+  const nameText = isAI ? 'IntegrateAI' : (isJoel ? 'Joel Grates' : 'Dickon Morris');
+  const el = document.createElement('div');
+  el.className = 'slack-msg';
+  el.innerHTML = `
+    <div class="msg-av ${avClass}">${avText}</div>
+    <div class="msg-body">
+      <div class="msg-head">
+        <span class="msg-name ${isAI ? 'ai-name' : ''}">${nameText}</span>
+        ${isAI ? '<span class="msg-bot">APP</span>' : ''}
+        <span class="msg-time">${getTime()}</span>
+      </div>
+      <div class="msg-text">${html}</div>
+    </div>`;
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  requestAnimationFrame(() => { el.offsetHeight; el.classList.add('in'); });
+}
+
+function getTime() {
+  const d = new Date();
+  return `${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')} ${d.getHours()>=12?'PM':'AM'}`;
+}
+
+/* ══════════════════════════════════════════
+   SHOW QUEUE ITEM
+══════════════════════════════════════════ */
+function showQueueItem(d) {
+  qEmptyEl.style.display = 'none';
+  qCountEl.textContent = '1';
+  qCountEl.classList.remove('zero');
+
+  const isComm = !!d.draft;
+  const hasPreview = !!d.preview;
+  const needsReview = isComm || hasPreview;
+  const item = document.createElement('div');
+  item.className = 'q-item';
+  item.dataset.doneText = d.doneText;
+  item.dataset.doneSub  = d.doneSub;
+  item.dataset.title    = d.title;
+
+  let previewHtml = '';
+  if (isComm) {
+    previewHtml = `<div class="qi-draft" id="qidraft_${current}"><div class="qi-draft-label">${d.draftLabel || 'Email Preview'}</div><div class="qi-draft-text">${d.draft}</div></div>`;
+  }
+  if (hasPreview) {
+    previewHtml += `<div class="qi-preview-link" onclick="event.preventDefault()"><div class="qi-preview-icon ${d.preview.icon}">${d.preview.abbr}</div><div class="qi-preview-text">${d.preview.text}</div><div class="qi-preview-arrow">↗</div></div>`;
+  }
+
+  item.innerHTML = `
+    <div class="qi-top">
+      <span class="qi-type ${d.cls}">${d.type}</span>
+      <span class="qi-badge ${d.trigger}">${d.trigger === 'proactive' ? '● Proactive' : '● Requested'}</span>
+    </div>
+    <div class="qi-body" id="qibody_${current}">
+      <div class="qi-title">${d.title}</div>
+      <div class="qi-detail">${d.detail}</div>
+      <div class="qi-chips">${d.chips.map(c=>`<span class="qi-chip">${c}</span>`).join('')}</div>
+      ${previewHtml}
+      <div style="margin-bottom:12px"><span class="qi-agent">${d.agent}</span></div>
+      <div id="qifeedback_${current}"></div>
+      <div id="qirevising_${current}"></div>
+      <div class="${needsReview ? 'qi-actions-comm' : 'qi-actions'}" id="qiactions_${current}">
+        <button class="btn-approve" onclick="approveItem(this)">${d.okText}</button>
+        ${needsReview ? '<button class="btn-changes" id="btnChanges_' + current + '">Request Changes</button>' : ''}
+        <button class="btn-decline" onclick="declineItem(this)">Decline</button>
+      </div>
+    </div>
+    <div class="qi-executing" id="qiexec_${current}">
+      <div class="exec-text">Sending…</div>
+      <div class="exec-bar"><div class="exec-fill" id="qiexecfill_${current}"></div></div>
+    </div>
+    <div class="qi-done" id="qidone_${current}">
+      <div class="qi-done-check">✓</div>
+      <div class="qi-done-text">${d.doneText}</div>
+      <div class="qi-done-sub">${d.doneSub}</div>
+    </div>`;
+  qItemsEl.appendChild(item);
+  requestAnimationFrame(() => { item.offsetHeight; item.classList.add('in'); });
+}
+
+function approveItem(btn) {
+  const item     = btn.closest('.q-item');
+  const doneText = item.dataset.doneText;
+  const doneSub  = item.dataset.doneSub;
+  const title    = item.dataset.title;
+  const body     = item.querySelector('.qi-body');
+  const exec     = item.querySelector('.qi-executing');
+  const done     = item.querySelector('.qi-done');
+  const fill     = item.querySelector('.exec-fill');
+
+  // Queue panel: executing state
+  body.style.display = 'none';
+  exec.classList.add('show');
+  item.classList.add('approved');
+  setTimeout(() => { fill.style.width = '100%'; }, 50);
+
+  // Queue panel: done state
+  setTimeout(() => {
+    exec.classList.remove('show');
+    done.classList.add('show');
+  }, 1400);
+
+  // Slack: post confirmation message back into the conversation
+  setTimeout(() => {
+    showConfirmMsg(title, doneText, doneSub);
+  }, 1800);
+}
+
+function showConfirmMsg(title, doneText, doneSub) {
+  const el = document.createElement('div');
+  el.className = 'slack-msg';
+  el.innerHTML = `
+    <div class="msg-av ai">AI</div>
+    <div class="msg-body">
+      <div class="msg-head">
+        <span class="msg-name ai-name">IntegrateAI</span>
+        <span class="msg-bot">APP</span>
+        <span class="msg-time">${getTime()}</span>
+      </div>
+      <div class="msg-confirm">
+        <div class="msg-confirm-top">✓ &nbsp;${doneText}</div>
+        <div class="msg-confirm-sub">${doneSub}</div>
+      </div>
+    </div>`;
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  requestAnimationFrame(() => { el.offsetHeight; el.classList.add('in'); });
+}
+
+function declineItem(btn) {
+  const item = btn.closest('.q-item');
+  item.classList.add('declined');
+}
+
+function showRevisionFeedback(feedback, idx) {
+  // Disable the Request Changes button
+  const changesBtn = document.getElementById(`btnChanges_${idx}`);
+  if (changesBtn) changesBtn.classList.add('used');
+
+  // Show feedback
+  const fbEl = document.getElementById(`qifeedback_${idx}`);
+  if (fbEl) {
+    fbEl.innerHTML = `<div class="qi-feedback"><div class="qi-feedback-label">Dickon's feedback</div><div class="qi-feedback-text">"${feedback}"</div></div>`;
+  }
+
+  // Show revising indicator
+  const revEl = document.getElementById(`qirevising_${idx}`);
+  if (revEl) {
+    revEl.innerHTML = `<div class="qi-revising"><div class="qi-revising-dot"></div>Agent redrafting…</div>`;
+  }
+}
+
+function showRedraft(newDraft, idx) {
+  // Clear revising indicator
+  const revEl = document.getElementById(`qirevising_${idx}`);
+  if (revEl) revEl.innerHTML = '';
+
+  // Clear feedback
+  const fbEl = document.getElementById(`qifeedback_${idx}`);
+  if (fbEl) fbEl.innerHTML = '';
+
+  // Update draft with new content and revised styling
+  const draftEl = document.getElementById(`qidraft_${idx}`);
+  if (draftEl) {
+    draftEl.classList.add('revised');
+    draftEl.querySelector('.qi-draft-text').innerHTML = newDraft;
+  }
+}
+
+/* ══════════════════════════════════════════
+   START SCENARIO
+══════════════════════════════════════════ */
+function startScenario(idx) {
+  clearAll();
+  resetSlack();
+  resetQueue();
+  resetProgress();
+  current = idx;
+
+  // Highlight tabs
+  document.querySelectorAll('.stab').forEach((t,i) => t.classList.toggle('active', i===idx));
+
+  const s = SCENARIOS[idx];
+
+  // Trigger badge
+  triggerEl.className = `cbar-trigger ${s.type}`;
+  const hasJoel = s.steps.some(st => st.from === 'joel');
+  triggerEl.textContent = s.type === 'proactive' ? '● System detected' : (hasJoel ? '● JG requested' : '● DM requested');
+
+  // Run steps
+  s.steps.forEach(step => {
+    const t = setTimeout(() => {
+      if (step.act === 'msg')     showMsg(step.from, step.text.replace(/\n/g, '<br>'));
+      if (step.act === 'typing')  typingEl.classList.add('show');
+      if (step.act === 'queue')   showQueueItem(step.data);
+      if (step.act === 'revise')  showRevisionFeedback(step.feedback, step.idx || current);
+      if (step.act === 'redraft') showRedraft(step.newDraft, step.idx || current);
+      if (step.act === 'auto_approve') {
+        const btn = document.querySelector(`#qiactions_${step.idx || current} .btn-approve`);
+        if (btn) approveItem(btn);
       }
+    }, step.at);
+    timers.push(t);
+  });
+
+  // Progress bar
+  advFillEl.style.transition = `width ${s.duration}ms linear`;
+  advFillEl.offsetHeight;
+  advFillEl.style.width = '100%';
+
+  // Auto-advance
+  const next = setTimeout(() => {
+    startScenario((idx + 1) % SCENARIOS.length);
+  }, s.duration);
+  timers.push(next);
+}
+
+/* ══════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════ */
+// Revenue data (30 days)
+const REV = [780,920,880,1020,1180,1340,960,840,990,1050,1120,1250,1480,1020,790,950,980,1080,1220,1390,980,820,940,1010,1140,1290,1450,1010,870,1080];
+
+// 7-day moving average
+function movAvg(data, n) {
+  return data.map((_, i) => {
+    if (i < n-1) return null;
+    const slice = data.slice(i-n+1, i+1);
+    return slice.reduce((a,b)=>a+b,0)/n;
+  });
+}
+
+function buildChart() {
+  const svg = document.getElementById('revenueChart');
+  if (!svg) return;
+  const W = 520, H = 140, padL = 40, padB = 20, padT = 10, padR = 10;
+  const chartW = W - padL - padR;
+  const chartH = H - padB - padT;
+  const minV = Math.min(...REV) - 80;
+  const maxV = Math.max(...REV) + 60;
+  const n = REV.length;
+
+  const xp = i => padL + (i / (n-1)) * chartW;
+  const yp = v => padT + chartH - ((v - minV) / (maxV - minV)) * chartH;
+
+  // Grid lines
+  let grid = '';
+  [0.25, 0.5, 0.75, 1].forEach(p => {
+    const y = padT + chartH * (1 - p);
+    const val = Math.round(minV + (maxV - minV) * p);
+    grid += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="rgba(255,255,255,.04)" stroke-width="1"/>`;
+    grid += `<text x="${padL - 5}" y="${y+4}" fill="rgba(255,255,255,.15)" font-size="9" text-anchor="end" font-family="JetBrains Mono">£${val}</text>`;
+  });
+
+  // Area path
+  let areaD = `M ${xp(0)} ${yp(REV[0])}`;
+  REV.forEach((v,i) => { if(i>0) areaD += ` L ${xp(i)} ${yp(v)}`; });
+  areaD += ` L ${xp(n-1)} ${H-padB} L ${padL} ${H-padB} Z`;
+
+  // Line path
+  let lineD = `M ${xp(0)} ${yp(REV[0])}`;
+  REV.forEach((v,i) => { if(i>0) lineD += ` L ${xp(i)} ${yp(v)}`; });
+
+  // Moving avg path
+  const avg = movAvg(REV, 7);
+  let avgD = '';
+  avg.forEach((v,i) => {
+    if (v === null) return;
+    avgD += avgD === '' ? `M ${xp(i)} ${yp(v)}` : ` L ${xp(i)} ${yp(v)}`;
+  });
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#D97757" stop-opacity="0.12"/>
+        <stop offset="100%" stop-color="#D97757" stop-opacity="0"/>
+      </linearGradient>
+      <clipPath id="clipLeft">
+        <rect x="${padL}" y="0" width="0" height="${H}" id="clipRect"/>
+      </clipPath>
+    </defs>
+    ${grid}
+    <path d="${areaD}" fill="url(#areaGrad)" clip-path="url(#clipLeft)"/>
+    <path d="${lineD}" fill="none" stroke="#D97757" stroke-width="1.5" stroke-linejoin="round" clip-path="url(#clipLeft)" id="revLine"/>
+    <path d="${avgD}" fill="none" stroke="#9A9590" stroke-width="1" stroke-dasharray="3 4" stroke-linejoin="round" clip-path="url(#clipLeft)" opacity="0.4"/>
+  `;
+
+  // Animate clip rect
+  const clipR = svg.querySelector('#clipRect');
+  if (clipR) {
+    const animate = () => {
+      let start = null;
+      const dur = 2000;
+      const step = ts => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / dur, 1);
+        clipR.setAttribute('width', p * chartW);
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    setTimeout(animate, 400);
+  }
+}
+
+// Donut chart
+const CHANNELS = [
+  { label: 'Wholesale', pct: 37, val: '£8,940', color: '#4A6FA5' },
+  { label: 'Ship Street Café', pct: 24, val: '£5,810', color: '#D97757' },
+  { label: 'Workshop Roastery', pct: 14, val: '£3,390', color: '#C4943A' },
+  { label: 'Online / Shopify', pct: 15, val: '£3,620', color: '#4A7C59' },
+  { label: 'Subscriptions', pct: 10, val: '£2,620', color: '#7B61A5' }
+];
+
+function buildDonut() {
+  const svg = document.getElementById('donutChart');
+  const legend = document.getElementById('donutLegend');
+  if (!svg || !legend) return;
+
+  const cx=70, cy=70, r=50, gap=2;
+  const circ = 2 * Math.PI * r;
+  let offset = -circ * 0.25; // start at top
+  let paths = '';
+
+  CHANNELS.forEach(ch => {
+    const arc = (ch.pct / 100) * circ - gap;
+    paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${ch.color}" stroke-width="10"
+      stroke-dasharray="${arc} ${circ - arc}" stroke-dashoffset="${-offset}" class="donut-seg" data-arc="${arc}" data-circ="${circ}" opacity="0">
+    </circle>`;
+    offset += (ch.pct / 100) * circ;
+  });
+
+  svg.innerHTML = `
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="10"/>
+    ${paths}
+    <text x="${cx}" y="${cy-4}" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="400" font-family="JetBrains Mono">£24.4k</text>
+    <text x="${cx}" y="${cy+10}" text-anchor="middle" fill="#9A9590" font-size="7" font-family="JetBrains Mono" letter-spacing="1">MTD</text>
+  `;
+
+  legend.innerHTML = CHANNELS.map(ch => `
+    <div class="dl-item">
+      <div class="dl-left"><div class="dl-sq" style="background:${ch.color}"></div>${ch.label}</div>
+      <div class="dl-val">${ch.val}</div>
+    </div>`).join('');
+
+  // Animate
+  setTimeout(() => {
+    svg.querySelectorAll('.donut-seg').forEach((seg, i) => {
+      setTimeout(() => {
+        seg.style.transition = 'opacity .5s ease';
+        seg.style.opacity = '1';
+      }, i * 150);
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' }).observe(el);
-});
+  }, 500);
+}
 
-// ═══ PROGRESS BARS fill on scroll ═══
-document.querySelectorAll('.phase-progress-fill').forEach(function(bar) {
-  new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('filled'); });
-  }, { threshold: 0.01, rootMargin: '100px 0px' }).observe(bar);
-});
+// KPI counters
+function animateCounters() {
+  document.querySelectorAll('.kpi-val[data-target]').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const fmt    = el.dataset.fmt;
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const dur = 1600;
+    let start = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      const val = target * ease;
+      let disp = '';
+      if (fmt === 'comma')   disp = prefix + Math.round(val).toLocaleString('en-GB') + suffix;
+      if (fmt === 'dec')     disp = prefix + val.toFixed(1) + suffix;
+      if (fmt === 'int')     disp = prefix + Math.round(val) + suffix;
+      el.textContent = disp;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
 
-// ═══ NAV active state ═══
-var pills = document.querySelectorAll('.nav-pill');
-['phase1','phase2','phase3','phase4'].forEach(function(id) {
-  var sec = document.getElementById(id);
-  if (!sec) return;
-  new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        pills.forEach(function(p) { p.classList.remove('active'); });
-        var a = document.querySelector('.nav-pill[href="#' + id + '"]');
-        if (a) a.classList.add('active');
-      }
-    });
-  }, { threshold: 0.15 }).observe(sec);
-});
+// Alerts
+const ALERTS = [
+  { cls:'e', title:'Greenhood Coffee — At Risk',    desc:'18 days since last order. Usual cycle: 7 days.' },
+  { cls:'w', title:'Big House Blend Margin 14%',    desc:'Target 24%. Green bean costs up — wholesale price not updated.' },
+  { cls:'w', title:'The Crown Inn £840 overdue',    desc:'Invoice outside 14-day payment terms.' },
+  { cls:'s', title:'12 subscription candidates',    desc:'Ship Street regulars buying 2+ bags/week — not subscribed.' },
+  { cls:'i', title:'Loring roast schedule gap',     desc:'6hrs idle Thursday — consolidate to save £120/wk.' }
+];
 
-// Smooth scroll nav
-document.querySelectorAll('.nav-pills a').forEach(function(a) {
-  a.addEventListener('click', function(e) { e.preventDefault(); document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'}); });
-});
+function buildAlerts() {
+  const list = document.getElementById('alertList');
+  if (!list) return;
+  list.innerHTML = ALERTS.map((a,i) => `
+    <div class="alert-item ${a.cls}" style="transition-delay:${i*0.12}s">
+      <div class="alert-icon"></div>
+      <div class="alert-content">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-desc">${a.desc}</div>
+      </div>
+      <button class="alert-cta">View →</button>
+    </div>`).join('');
+}
+
+// Wholesale table
+const WHOLESALE = [
+  { name:'Selfridges',        val:'£2,680', last:'3 days', status:'g', sLabel:'Active' },
+  { name:'Jamie Oliver Group', val:'£2,140', last:'5 days', status:'g', sLabel:'Active' },
+  { name:'Luminary Bakery',   val:'£1,420', last:'4 days', status:'g', sLabel:'Active' },
+  { name:'Greenhood Coffee',  val:'£1,080', last:'18 days', status:'r', sLabel:'At Risk' },
+  { name:'Lyall & Co',        val:'£960',   last:'2 days', status:'g', sLabel:'Active' },
+  { name:'The Crown Inn',     val:'£660',   last:'12 days', status:'a', sLabel:'Declining' }
+];
+
+function buildTable() {
+  const tbody = document.getElementById('wholesaleBody');
+  if (!tbody) return;
+  tbody.innerHTML = WHOLESALE.map((w,i) => `
+    <tr class="trow" style="transition-delay:${i*0.1}s">
+      <td>${w.name}</td>
+      <td style="font-family:var(--mono)">${w.val}</td>
+      <td>${w.last} ago</td>
+      <td><span class="h-dot ${w.status}">${w.sLabel}</span></td>
+    </tr>`).join('');
+}
+
+function initDashboard() {
+  buildChart();
+  buildDonut();
+  buildAlerts();
+  buildTable();
+  setTimeout(() => {
+    animateCounters();
+    document.querySelectorAll('.alert-item').forEach(el => el.classList.add('in'));
+    setTimeout(() => { document.querySelectorAll('.trow').forEach(el => el.classList.add('in')); }, 300);
+  }, 400);
+}
+
+/* ══════════════════════════════════════════
+   INTERSECTION OBSERVERS
+══════════════════════════════════════════ */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+const dashObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !dashInit) {
+      dashInit = true;
+      initDashboard();
+    }
+  });
+}, { threshold: 0.1 });
+const dashEl = document.querySelector('.browser-wrap');
+if (dashEl) dashObs.observe(dashEl);
+
+// Auto-start once scenario section is visible
+const execObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      startScenario(0);
+      execObs.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+const demoEl = document.querySelector('.demo-outer');
+if (demoEl) execObs.observe(demoEl);
+
+/* ══════════════════════════════════════════
+   DASHBOARD CLOCK
+══════════════════════════════════════════ */
+function updateClock() {
+  const el = document.getElementById('dashUpdated');
+  if (el) el.textContent = 'Updated just now';
+}
+setInterval(updateClock, 60000);
 </script>
 </body>
 </html>
